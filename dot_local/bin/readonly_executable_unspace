@@ -1,0 +1,220 @@
+#!/usr/bin/env perl
+use Text::Unidecode;
+use File::Basename;
+use Digest::file qw(digest_file_base64);
+
+sub usage
+{
+	print q{
+usage: unspace [-p] [-h] NEW OLD] [FILE ...]
+usage: unspace -o OLD NEW
+
+Rename given files to remove whitespace and shell magic from their names.
+When an html file is renamed, also rename directory OLD_files and update
+the string OLD_files to NEW_files within the html file.
+
+If no files are given on the command line, read stdin, remove whitespace
+and shell magic, and print the result.
+
+The -p flag can be used to just print the new names without renaming.
+
+The -q flag makes -p quieter, printing only changed names.
+
+The -o flag can be used to rename a single file, OLD to NEW, performing
+the special html processing if needed.
+
+The -f flag can be used to force rename of directories which are otherwise skipped.
+
+The -h flag prints this message and exits.
+};
+	exit 0;
+}
+
+my @files;
+my $force = 0;
+my $justprint = 0;
+my $justchanges = 0;
+my $justrename = 0;
+my $tag = runtag();
+while(my $arg = shift @ARGV)
+{
+	if ($arg eq '-o')
+	{
+		my $old = shift @ARGV;
+		my $new = shift @ARGV;
+		renamefile($old,$new);
+		exit 0;
+	}
+
+	if ($arg eq '-p')
+	{
+		$justprint = 1;
+	}
+	elsif ($arg eq '-q')
+	{
+		$justprint = $justchanges = 1;
+	}
+	elsif ($arg eq '-f')
+	{
+		$force = 1;
+	}
+	elsif ($arg eq '--')
+	{
+		last;
+	}
+	elsif ($arg =~ /^-/)
+	{
+		usage();
+	}
+	else
+	{
+		unshift @ARGV,$arg;
+		last;
+	}
+}
+if (@ARGV == 0) 
+{
+	$/ = undef;
+	my $old = <STDIN>;
+	print fixname($old),"\n";
+	exit 0;
+}
+while(my $old = shift @ARGV)
+{
+	next if (-d $old && !$force);
+	if ($justprint)
+	{
+		my $new = fixname($old);
+		print $old, " -> ", $new, "\n" unless ($old eq $new && $justchanges);
+	}
+	else
+	{
+		renamefile($old);
+	}
+}
+
+# return a random 3 character tag for each run
+sub runtag
+{
+	my $tag = '';
+	for(my $i = 0; $i < 3; ++$i) {
+		$tag .= substr("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",int(rand 52),1);
+	}
+	return $tag;
+}
+
+# return what's left after removing common low entropy features
+sub unique_part
+{
+	my $base = shift @_;
+	$base =~ s/^$tag//;			# delete any run tag
+	$base =~ tr/a-zA-Z0-9//cd;	# delete punctuation
+	$base =~ s/photo//gi;		# delete common strings
+	$base =~ s/video//gi;
+	$base =~ s/movie//gi;
+	$base =~ s/flash//gi;
+	$base =~ s/tumblr//gi;
+	$base =~ s/header//gi;
+	$base =~ s/image//gi;
+	$base =~ s/img//gi;
+	$base =~ s/raw//gi;
+	$base =~ s/vid//gi;
+	$base =~ s/^0+//g;			# delete leading zeros
+	return $base;
+}
+
+sub fixname
+{
+	my $old = shift @_;
+	my ($new,$path,$ext) = fileparse($old,qr/\.[^.]+$/);
+	$path = "" if ($path eq "./");
+	# prefix the run tag to digit only names so they'll sort together
+	# if you run unspace shortly after adding them
+	$new = $tag . $new if ($new =~ /^\d+$/);
+	# append md5 for short, low entropy names
+	$new .= '-' .  digest_file_base64($old,"MD5") if (length(unique_part($new)) <= 4);
+	$new =~ s/^[^a-zA-Z0-9]+//g;	# trim leading and trailing noise ...
+	$new =~ s/[^a-zA-Z0-9]+$//g;	
+	$ext =~ s/^[^a-zA-Z0-9]+//g;	# ... from file name and extension
+	$ext =~ s/[^a-zA-Z0-9]+$//g;
+	$new .= ".$ext";
+	$new =~ s{\s+}{ }g;				# runs of whitespace become one space
+	$new =~ s{\N{U+2019}}{'}g;		# convert RIGHT SINGLE QUOTATION MARK
+	$new =~ s{\x{e2}\x{80}\x{99}}{'}g;
+	$new =~ s{\b(.*)'s\b}{$1s}g;	# eliminate posessive apostrophe
+	$new =~ s{\s+}{_}g;				# whitespace becomes underscore
+	$new =~ s{&+}{+}g;				# ampersands become plus
+	$new =~ tr{a-zA-Z0-9_.,;:!=+@#%^]+}{-}cs;	# uglies become dash
+	$new =~ s/_(\W)/$1/g;			# eliminate underscores around nonwords
+	$new =~ s/(\W)_/$1/g;
+	$new =~ s{_+}{_}g;				# runs of underscore become one underscore
+	$new =~ s{^\W+}{}g;				# trim leading and trailing nonwords
+	$new =~ s{\W+$}{}g;
+	$new =~ s{[_-]\.}{.}g;			# don't create names like a-1-.jpg
+	$new =~ s{_-}{-}g;				# don't create names like a_-1jpg
+	$new =~ s{-_}{-}g;				# don't create names like a-_1jpg
+	return $path . $new;
+}
+	
+# rename file and perform any special html processing
+sub renamefile
+{
+	my $old = shift @_;
+	my $new = shift @_ // fixname($old);
+	return if ($new eq $old);
+	return unless (-f $old);
+	if ($old =~ /^(.+)\.html?$/i)
+	{
+		renamehtmlfile($old,$new);
+	}
+	else
+	{
+		rename($old,$new) || die "Can't rename $old to $new: $!\n";
+	}
+}
+
+sub escape
+{
+	my $str = shift @_;
+	$str =~ s{ }{%20}g;
+	$str =~ s{&}{%26}g;
+	$str =~ s{/}{%2F}g;
+	$str =~ s{<}{%3C}g;
+	$str =~ s{>}{%3E}g;
+	$str =~ s{\?}{%3F}g;
+	return $str;
+}
+	
+# rename an html file and fix links into corresponding *_files directory
+sub renamehtmlfile
+{
+	my $old = shift @_;
+	my $new = shift @_;
+	die "$old doesn't end in .html or .htm\n";
+	die "$new doesn't end in .html or .htm\n";
+	my $oldfiles = $old;
+	$oldfiles =~ s/.html?$/_files/i;
+	my $newfiles = $new;
+	$newfiles =~ s/.html?$/_files/i;
+	my $eoldfiles = escape($oldfiles);
+	my $enewfiles = escape($newfiles);
+	open(my $nfh,">",$new) || die "Can't open >$new: $!\n";
+	if ($old eq $new) {
+		my $tmp = $old . ".old";
+		rename($old,$tmp) || die "Can't rename $old to $tmp $!\n";
+		$old = $tmp;
+	}
+	open(my $ofh,"<",$old) || die "Can't open <$old: $!\n";
+	while($_ = <$ofh>)
+	{
+		s/\Q$oldfiles\E/$newfiles/g;
+		s/\Q$eoldfiles\E/$enewfiles/g;
+		print $nfh $_;
+	}
+	close($ofh);
+	close($nfh);
+	unlink($old);
+	rename($oldfiles,$newfiles);
+}
+
+0;

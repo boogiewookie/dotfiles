@@ -1,0 +1,10 @@
+{{ $passphrase := promptStringOnce . "passphrase" "passphrase" -}}
+
+encryption = "gpg"
+
+[data]
+    email = "kevetduncombe@gmail.com"
+    passphrase = {{ $passphrase | quote }}
+[gpg]
+    symmetric = true
+    args = ["--batch", "--passphrase", {{ $passphrase | quote }}, "--no-symkey-cache"]

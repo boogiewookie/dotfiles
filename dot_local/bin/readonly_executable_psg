@@ -1,0 +1,30 @@
+#!/usr/bin/env perl
+#
+#  Grep thru ps output for given string(s); always exclude this process
+#  Public domain 1994 by Kevet Duncombe
+#
+my $pflag="";
+if ($ARGV[0] eq '-p')
+{
+	$pflag = join(" ",splice(@ARGV,0,2));
+}
+$osys = 'unknown' if (!eval('$osys = `uname -s`'));
+if ($osys =~ /FreeBSD/)
+{
+	$pflag = "-ax" if ($pflag eq "");
+	@proc = `ps $pflag -ww -o pid,ppid,user,tty,vsz,start,pcpu,time,wchan,state,command`;
+}
+elsif ($osys =~ /SunOS/)
+{
+	$pflag = "-e" if ($pflag eq "");
+	@proc = `ps $pflag -o pid,ppid,user,tty,vsz,etime,pcpu,time,wchan,s,args`;
+}
+else	#allegedly posix, only tested on SunOS and Ubuntu
+{
+	$pflag = "-e" if ($pflag eq "");
+	@proc = `ps $pflag -o pid,ppid,user,tty,vsz,etime,pcpu,time,wchan,s,args`;
+}
+print shift @proc;
+$hits = join '|',@ARGV;
+@proc = grep(/$hits/i && !/^\s*$$\s/,@proc) unless ($hits eq "");
+print sort @proc;

@@ -1,0 +1,94 @@
+#!/usr/bin/env perl
+my $mmddyy = 0;
+my $mmddyyyy = 0;
+my $yyyymmdd = 0;
+my $numeric = 0;
+my $center = 0;
+my $right = 0;
+while($ARGV[0] =~ /^-/)
+{
+	$_ = shift @ARGV;
+	if (/-?-mmddyy/ || /-mdy/)	#-mdy is ancient history
+	{
+		$mmddyy = 1;
+	}
+	elsif (/-?-mmddyyyy/)
+	{
+		$mmddyyyy = 1;
+	}
+	elsif (/-?-yyyymmdd/)
+	{
+		$yyyymmdd = 1;
+	}
+	elsif (/-?-date/)
+	{
+		$mmddyy = $mmddyyyy = $yyyymmdd = 1;
+	}
+	elsif (/-?-numeric/)
+	{
+		$numeric = 1;
+	}
+	elsif (/-?-center/)
+	{
+		$center = 1;
+	}
+	elsif (/-?-right/)
+	{
+		$right = 1;
+	}
+	else
+	{
+		print qq{unknown flag $_
+
+usage: $0
+Copy stdin to stdout converting tabs to twiki style table markup.
+    --mmddyyyy	convert mm/dd/yyyy dates to yyyy-mm-dd form
+    --mmddyy	convert mm/dd/yy dates to yyyy-mm-dd form
+    --date		synonym for --mmddyyyy --mmddyy
+    --numeric	put two spaces before a numeric field to right align
+    --center	put two spaces before and after field to center
+};
+		exit 0;
+	}
+}
+
+while(chomp($_ = <>))
+{
+	while(/\t$/) {
+		chomp($_ .= <>);
+	}
+	my @field = split(/\t/,$_);
+	foreach $_ (@field)
+	{
+		my $center_it = $center;
+		s/^\s+//;	#trim leading whitespace
+		s/\s+$//;	#trim trailing whitespace
+		if (m{^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$} && $mmddyyyy)	# mm/dd/yyyy format date
+		{
+			$_ = sprintf("%04d-%02d-%02d",$3,$1,$2);
+		}
+		elsif (m{^(\d{1,2})[/-](\d{1,2})[/-](\d{2})$} && $mmddyy)	# mm/dd/yy format date
+		{
+			$_ = sprintf("%04d-%02d-%02d",$3+($3 < 43 ? 2000 : 1900),$1,$2);
+		}
+		elsif (m{^(\d{4})[/-](\d{1,2})[/-](\d{1,2})$} && $yyyymmdd)	# yyyy/mm/dd format date
+		{
+			$_ = sprintf("%04d-%02d-%02d",$1,$2,$3);
+		}
+		elsif (m{^\$?[+-]?[0-9]*\.?[0-9]*([eE][+-]?\d+)?[%*]?$} && m{\d} && $numeric)	#number
+		{
+			$_ = " $_";
+			$center_it = 0;
+		}
+		elsif ($right)
+		{
+			$_ = " $_";
+			$center_it = 0;
+		}
+
+		$_ = $center_it ?  "  $_  " : " $_ ";
+	}
+
+	print "|",join("|",@field),"|\n";
+}
+exit 0;

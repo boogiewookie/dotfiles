@@ -1,0 +1,189 @@
+#!/usr/bin/env perl
+use AnyDBM_File;
+
+my $dir;
+chomp($dir = `pwd`);
+my %info;
+my $nodirs = 0;
+my $nofiles = 0;
+my $cache = 0;
+my $div = 1024*1024;
+my $unit = 'mebibytes';
+my $showzeros = 0;
+foreach $_ (@ARGV)
+{
+	if (/^-f/)
+	{
+		$nodirs = 1;
+		$nofiles = 0;
+	}
+	elsif (/^-d/)
+	{
+		$nodirs = 0;
+		$nofiles = 1;
+	}
+	elsif (/^-b/)
+	{
+		$div = 1;
+		$unit = 'bytes';
+	}
+	elsif (/^-k/)
+	{
+		$div = 1024;
+		$unit = 'kibibytes';
+	}
+	elsif (/^-m/)
+	{
+		$div = 1024*1024;
+		$unit = 'mebibytes';
+	}
+	elsif (/^-g/)
+	{
+		$div = 1024*1024*1024;
+		$unit = 'gibibytes';
+	}
+	elsif (/^-t/)
+	{
+		$div = 1024*1024*1024*1024;
+		$unit = 'tebibytes';
+	}
+	elsif (/^-z/)
+	{
+		$showzeros = 1;
+	}
+	elsif (/^-C/)
+	{
+		$cache = 1;
+	}
+	elsif (/^-/)
+	{
+		die qq/
+To help determine what is hogging all your disk space, displays the
+contents of the current directory sorted by the total space consumed
+on the current device. Suppress display of sizes that round to zero.
+
+usage: Hogs [{-f |-d}] [{-b | -k | -m | -g | -t}] [-z] [-C]
+    -f only show files
+    -d only show directories
+    -b show size in bytes
+    -k show size in kibibytes
+    -m show size in mebibytes (the default)
+    -g show size in gibibytes
+    -t show size in tebibytes
+    -z also display sizes that round to size zero
+    -C cache info in database for future use
+/;
+	}
+	else
+	{
+		$dir = $_;
+		last;
+	}
+}
+
+if ($cache)
+{
+	my $now = time;
+	my $dbmfile = $ENV{HOME} . '/.Hogs.cache';
+	my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+			$atime,$mtime,$ctime,$blksize,$blocks) = stat $dbmfile;
+	unlink($dbmfile) if ($now > ($ctime+300) || $now > ($mtime+300));
+	my $X = tie(%info,'DB_File',$dbmfile) || die "Can't open $dbmfile: $!\n";
+}
+my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+	$atime,$mtime,$ctime,$blksize,$blocks) = stat $dir;
+my $samedev = $dev;
+opendir(D,$dir) || die "Can't open $dir: $!\n";
+my @files = readdir(D);
+closedir(D);
+foreach $_ (@files)
+{
+	my $bytes;
+	($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+			$atime,$mtime,$ctime,$blksize,$blocks) = lstat "$dir/$_";
+	if (-l _)	#it's a symlink
+	{
+		next;
+	}
+	elsif (-d _)#it's a subdir
+	{
+		next if ($_ eq "." || $_ eq ".." || $dev != $samedev || $nodirs);
+		$size = int(.5+subdir("$dir/$_",$samedev)/$div);
+		push(@lines,sprintf("%10d %s",$size,$_)) if ($size > 0 || $showzeros);
+		printf STDERR "\r%s\r%s",' ' x 79,$lines[-1] if (@lines);	#show progress msg
+	}
+	else		#it's a plain file
+	{
+		next if ($nofiles);
+		my $bytes = $blksize*$blocks;
+		$bytes = $size if ($size < $bytes);
+		$size = int(.5+$bytes/$div);
+		push(@lines,sprintf("%10d %s",$size,$_)) if ($size > 0 || $showzeros);
+	}
+}
+printf STDERR "\r%s\r",' ' x 79;	#clear progress msg
+print "Examining $dir with sizes rounded to $unit\n";
+if (@lines || $showzeros)
+{
+	print join("\n",sort @lines),"\n";
+}
+else
+{
+	print "Nothing's size exceeds one $unit ($div bytes)\n";
+}
+exit 0;
+
+sub subdir
+{
+	my ($dir,$samedev) = @_;
+	if ($cache)
+	{
+		my $info = $info{$dir};
+		if (defined($info))
+		{
+			my ($former_mtime,$former_size) = split(/\s/,$info);
+			my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+					$atime,$mtime,$ctime,$blksize,$blocks) = lstat $dir;
+			return $former_size if ($mtime == $former_mtime);
+		}
+	}
+
+	if (!opendir(D,$dir))
+	{
+		printf STDERR "\r%s\rCan't open $dir: $!\n";
+		return 0;
+	}
+	my @files = readdir(D);
+	closedir(D);
+	my $sum = 0;
+	foreach $_ (@files)
+	{
+		my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+				$atime,$mtime,$ctime,$blksize,$blocks) = lstat "$dir/$_";
+		if (-l _)	#it's a symlink
+		{
+			next;
+		}
+		elsif (-d _)	#it's a subdir
+		{
+			next if ($_ eq "." || $_ eq ".." || $dev != $samedev);
+			$sum += subdir("$dir/$_",$samedev);
+			#push @lines,sprintf("%10d %s/",$sum/$div,$_);
+		}
+		else		#it's a plain file
+		{
+			my $bytes = $blksize*$blocks;
+			$bytes = $size if ($size < $bytes);
+			$sum += $size;
+			#push @lines,sprintf("%10d %s",($bytes+$div-1)/$div,$_);
+		}
+	}
+
+	if ($cache)
+	{
+		my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+				$atime,$mtime,$ctime,$blksize,$blocks) = lstat $dir;
+		$info{$dir} = sprintf("%d %d",$mtime,$sum);
+	}
+	return $sum;
+}
