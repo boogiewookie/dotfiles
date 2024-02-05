@@ -1,10 +1,13 @@
-{{ $passphrase := promptStringOnce . "passphrase" "passphrase" -}}
+{{- $choices := list "desktop" "laptop" "server" -}}
+{{- $hosttype := promptChoiceOnce . "hosttype" "What type of host are you on" $choices -}}
+{{- $passphrase := promptStringOnce . "passphrase" "passphrase" -}}
 
 encryption = "gpg"
 
 [data]
     email = "kevetduncombe@gmail.com"
     passphrase = {{ $passphrase | quote }}
+    hosttype = {{ $hosttype | quote }}
 [gpg]
     symmetric = true
     args = ["--batch", "--passphrase", {{ $passphrase | quote }}, "--no-symkey-cache"]
