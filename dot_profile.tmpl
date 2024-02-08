@@ -8,12 +8,11 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# set default title bar prompt
 HOST=$(hostname -s); export HOST
 SIGL='$'
 [ "$(id -u)" = 0 ] && SIGL='#'
 {{ if eq .chezmoi.os "freebsd" }}
-PS1='${VIRTUAL_ENV_PROMPT:-}"'\u@\h:\w\$ '
+PS1="${VIRTUAL_ENV_PROMPT:-}"'\u@\h:\w\$ '
 {{ else }}
 PS1="${VIRTUAL_ENV_PROMPT:-}$USER@$HOST$SIGL "
 {{ end }}
