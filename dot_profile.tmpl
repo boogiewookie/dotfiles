@@ -8,11 +8,19 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
+# set default title bar prompt
+TS1="\[\033]0;USER@${HOST=$(hostname -s)}\007\]"
+{{ if eq .chezmoi.os "freebsd" }}
+PS1="${VIRTUAL_ENV_PROMPT:-}"'\u@\h\$ '
+TS1='\['$TS1'\]'
+{{ else }}
+PS1="${VIRTUAL_ENV_PROMPT:-}$USER@$HOST"
 if [ "$(id -u)" = 0 ]; then
-   PS1="$USER@$(hostname -s)# "
+    PS1="$PS1"'# '
 else
-   PS1="$USER@$(hostname -s)$ "
+    PS1="$PS1"'$ '
 fi
+{{ end }}
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
@@ -20,7 +28,13 @@ if [ -n "$BASH_VERSION" ]; then
     if [ -f "$HOME/.bashrc" ]; then
 	. "$HOME/.bashrc"
     fi
+    TS1='\[\033]0;\u@\h \w\007\]'
 fi
+
+# add title string to prompt if we have fancy title bars
+case "$TERM" in
+    xterm*|rxvt*) PS1="$TS1$PS1";;
+esac
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
