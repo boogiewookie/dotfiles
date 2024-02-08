@@ -9,7 +9,8 @@
 #umask 022
 
 # set default title bar prompt
-TS1="\[\033]0;USER@${HOST=$(hostname -s)}\007\]"
+TS1='\033]0;'$USER@${HOST=$(hostname -s)}'\007'
+export HOST
 {{ if eq .chezmoi.os "freebsd" }}
 PS1="${VIRTUAL_ENV_PROMPT:-}"'\u@\h\$ '
 TS1='\['$TS1'\]'
