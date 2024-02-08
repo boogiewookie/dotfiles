@@ -9,18 +9,13 @@
 #umask 022
 
 # set default title bar prompt
-TS1='\033]0;'$USER@${HOST=$(hostname -s)}'\007'
-export HOST
+HOST=$(hostname -s); export HOST
+SIGL='$'
+[ "$(id -u)" = 0 ] && SIGL='#'
 {{ if eq .chezmoi.os "freebsd" }}
-PS1="${VIRTUAL_ENV_PROMPT:-}"'\u@\h\$ '
-TS1='\['$TS1'\]'
+PS1='${VIRTUAL_ENV_PROMPT:-}"'\u@\h:\w\$ '
 {{ else }}
-PS1="${VIRTUAL_ENV_PROMPT:-}$USER@$HOST"
-if [ "$(id -u)" = 0 ]; then
-    PS1="$PS1"'# '
-else
-    PS1="$PS1"'$ '
-fi
+PS1="${VIRTUAL_ENV_PROMPT:-}$USER@$HOST$SIGL "
 {{ end }}
 
 # if running bash
@@ -29,13 +24,13 @@ if [ -n "$BASH_VERSION" ]; then
     if [ -f "$HOME/.bashrc" ]; then
 	. "$HOME/.bashrc"
     fi
-    TS1='\[\033]0;\u@\h \w\007\]'
+    PS1="${VIRTUAL_ENV_PROMPT:-}"'\u@\h:\w\$ '
 fi
 
 # add title string to prompt if we have fancy title bars
-case "$TERM" in
-    xterm*|rxvt*) PS1="$TS1$PS1";;
-esac
+#case "$TERM" in
+#    xterm*|rxvt*) PS1="$TS1$PS1";;
+#esac
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
