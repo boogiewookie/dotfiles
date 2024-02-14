@@ -1,0 +1,9 @@
+#!/bin/sh
+uname -a
+case "$(uname -s)" in
+FreeBSD)
+    freebsd-version ;;
+Linux)
+    lsb_release -c -i -r
+    [ -s /etc/debian_version ] && cat /etc/debian_version ;;
+esac

@@ -8,6 +8,40 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
+# Set some preferences
+export CDPATH=".:$DUNC/src/finance:$DUNC/src:/usr/local/www:$DUNC:$DUNC/Documents:$DUNC/Export:$DU
+export VISUAL='nvim'    
+export EDITOR='nvim'    
+export EXINIT=':set ts=4 sw=4 ai nows'    
+export PAGER='less -e'    
+export MANPAGER=less      
+export BLOCKSIZE="M"      
+export CVSIGNORE='.git/'    
+export NO_COLOR=exactly
+export PGHOST=localhost
+{{ if eq .hosttype "desktop" "laptop" }}
+export KEVETSCHWAB='Kevet-RothIRA.ofx Kevet-SchwabIRA.ofx Kevet-InheritedIRA.ofx Kevet-SchwabOne.ofx
+export SANDYSCHWAB='Sandy-SchwabIRA.ofx Sandy-SchwabOne.ofx Sandy-InheritedIRA.ofx Sandy-InheritedRo
+export SCHWABOFX="$KEVETSCHWAB $SANDYSCHWAB"
+export SCHWABPDF="`echo $SCHWABOFX | sed 's/ofx/pdf/g'`"
+export SCHWABCSV="`echo $SCHWABOFX | sed 's/ofx/csv/g'`"
+export ALPHAVANTAGE_API_KEY={{ pass "dotfiles/ALPHAVANTAGE_API_KEY" }}
+{{ end }}
+
+alias h='fc -l'    
+alias history='fc -l'    
+alias ls='ls -F'
+{{ if eq .hosttype "desktop" "laptop" }}
+{{ end }}
+
+resource () {   #FIXME
+    . /etc/profile
+    case $( ps -o comm $$ ) in
+    bash) . ~/.bashrc;;
+    *)    . ~/.shrc;;
+    esac
+}
+
 HOST=$(hostname -s); export HOST
 SIGL='$'
 [ "$(id -u)" = 0 ] && SIGL='#'
@@ -21,7 +55,7 @@ PS1="${VIRTUAL_ENV_PROMPT:-}$USER@$HOST$SIGL "
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
+        . "$HOME/.bashrc"
     fi
     PS1="${VIRTUAL_ENV_PROMPT:-}"'\u@\h:\w\$ '
 fi

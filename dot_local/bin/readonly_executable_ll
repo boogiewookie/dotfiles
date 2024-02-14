@@ -1,0 +1,18 @@
+if [ "$1" ]; then
+    case "$1" in
+    mail)
+        logs="/var/log/maillog";;
+    http|nginx)
+        logs="/var/log/nginx/error.log /var/log/nginx/access.log";;
+    *)
+        logs="/var/log/$1"
+        if ! [ -f "$logs" ]; then
+            logs="$logs.log"
+        fi;;
+    esac
+    exec less +F $logs
+elif [ -f /var/log/syslog ]; then
+    exec less +F /var/log/syslog
+elif [ -f /var/log/messages ]; then
+    exec less +F /var/log/messages
+fi

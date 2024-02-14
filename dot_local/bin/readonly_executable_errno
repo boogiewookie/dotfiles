@@ -1,0 +1,15 @@
+#!/bin/sh
+for f in \
+    /usr/include/sys/errno.h \
+    /usr/include/asm/errno.h \
+    /usr/src/lib/libc/gen/errlst.c \
+    /usr/include/bsd/errno.h \
+    /usr/include/asm-generic/errno-base.h \
+    /usr/include/asm-generic/errno.h \
+    /usr/include/asm-generic/errno-base.h \
+    #leave this comment right here so the list of files above is easy to change
+do
+    if [ -f "$f" ] && grep -i -w "$1" "$f"; then
+        break
+    fi
+done
