@@ -1,0 +1,10 @@
+.local/bin/pwdfor
+.ssh/*_ed25519
+.ssh/*_rsa
+.ssh/*.pem
+.database.ini
+.gnupg/crls.d/
+.gnupg/private-keys-*/*
+.gnupg/pubring.kbx
+.gnupg/trustdb.gpg
+
