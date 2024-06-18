@@ -10,27 +10,3 @@
 
 # set ENV to a file invoked each time sh is started.
 ENV=$HOME/.shrc; export ENV
-
-# if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
-    fi
-    PS1="${VIRTUAL_ENV_PROMPT:-}"'\u@\h:\w\$ '
-else
-    SIGL='$'
-    HOST=$(hostname -s)
-    [ "$(id -u)" = 0 ] && SIGL='#'
-    PS1="${VIRTUAL_ENV_PROMPT:-}$USER@$HOST$SIGL "
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi
