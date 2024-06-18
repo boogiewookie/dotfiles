@@ -44,11 +44,6 @@ else
     PS1="${VIRTUAL_ENV_PROMPT:-}$USER@$HOST$SIGL "
 fi
 
-
-case "$-" in
-*i*) bind "\C-d: possible-completions";;
-esac
-
 if ! which vim >/dev/null; then
 	alias vim="vi"
 elif [ -f ~/.vimrc ]; then
