@@ -1,0 +1,30 @@
+#!/bin/sh -C
+skel="\n-----\n\n"
+if test -z "$1"
+then
+	if test ! -t 1
+	then
+		printf "$skel"
+	else
+		printf "$skel" >> clues.txt
+	fi
+elif test "$1" = "-w"
+then
+	printf "\n---+ -----\n\n<verbatim>\n</verbatim>\n\n";
+else
+    while test -n "$1"
+    do
+		if test ! -e "$1"
+		then
+			mkdir "$1"
+		fi
+		if test -d "$1" -a ! -e "$1/clues.txt"
+		then
+			printf "$skel" > "$1/clues.txt"
+		elif test -f "$1"
+		then
+			printf "$skel" >> "$1"
+		fi
+		shift
+    done
+fi

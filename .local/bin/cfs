@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+DUNC=~dunc
+CFS=$DUNC/encfs/cfs
+if [ `whoami` = 'dunc' ] ; then
+	if ! [ -f "$CFS/.ismounted" ]; then
+		encfs --extpass="${EXTPASS:-secret-tool lookup cfs dunc}" -o nonempty -i 30 $DUNC/Export/.encfs/cfs $CFS
+	fi
+	if [ -f "$CFS/.ismounted" ]; then
+		if which ssh-keygen >/dev/null; then
+			if which sha256sum >/dev/null; then
+				I=$DUNC/.ssh/id_rsa
+				if [ -f $I ]; then
+					F="$CFS/ssh/$( ssh-keygen -l -f $I | cut -d ' ' -f 3 )-$(ssh-keygen -l -f $I | sha256sum | head -c 8)"
+					cp "$I" "$F"
+				fi
+				I=$DUNC/.ssh/id_ed25519
+				if [ -f $I ]; then
+					F="$CFS/ssh/$( ssh-keygen -l -f $I | cut -d ' ' -f 3 )-$(ssh-keygen -l -f $I | sha256sum | head -c 8)"
+					cp "$I" "$F"
+				fi
+			fi
+		fi
+		if which gpg2 >/dev/null; then
+			F=$CFS/sessame.txt
+			if [ -f $F ]; then
+				gpg2 -e -r metamaya_backup -a -o $DUNC/.sessame.txt.gpg --batch --yes $F
+			fi
+			F=$(echo $CFS/bitwarden_export_*.json | awk 'END {print $NF}')
+			if [ -f $F ]; then
+				gpg2 -e -r metamaya_backup -a -o $DUNC/.bitwarden.json.gpg --batch --yes $F
+			fi
+		fi
+	fi
+else
+	echo "begone `whoami`, you imposter"
+	exit 1
+fi

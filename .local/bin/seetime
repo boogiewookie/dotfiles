@@ -1,0 +1,80 @@
+#!/usr/bin/env perl
+# Public domain by Kevet Duncombe, 2000.
+$now = time();
+
+unshift( @ARGV,"now") if (@ARGV == 0);
+foreach $i (@ARGV)
+{
+    $t = getDate($i);
+    $g = gmtime($t);
+    $l = localtime($t);
+    print "$t = $l ($g GMT)\n";
+}
+
+sub getDate
+{
+    $_ = shift @_;
+    if (!defined($_) || m=now|today=)
+    {
+        return $now;
+    }
+    elsif (m=^(\d\d\d\d)[-/](\d\d?)[-/](\d\d?)$=)
+    {
+        return date2time($1,$2,$3);
+    }
+    elsif (m=^(\d\d?)[-/](\d\d?)$=)
+    {
+        @_ = gmtime($now);
+        return date2time($_[5]+1900,$1,$2);
+    }
+    elsif (m=^(-)?([x0-9abcdef]+)(\.[0-9abcdef]+)?$=i)
+    {
+        my ($neg,$val) = ($1,$2);
+        $val = ($val =~ /^0/) ? oct($val) : ($val+0);
+		$val /= 1000 while($val > 99999999999);
+        return ($neg =~ /-/) ? -$val : $val;
+    }
+    else
+    {
+        die  "date $_ is not in the form yyyy/mm/dd, mm/dd, or unix time\n";
+    }
+}
+
+sub date2julian
+{
+    my ($year,$month,$day) = @_;
+    my ($i,$j,$y,$m);
+
+    if ($year < 0)
+    {
+        ++$year;
+    }
+
+    if ($month > 2)
+    {
+        $y = $year;
+        $m = $month+1;
+    }
+    else
+    {
+        $y = $year-1;
+        $m = $month+13;
+    }
+    $j = int(365.25*$y) + int(30.6001*$m) + int($day) + 1720995;
+
+    # check for switch to gregorian calendar
+    if (($day+31*($month+12*$year)) >= 588829)
+    {
+        $i = int(.01*$y);
+        $j += 2 - $i + int(.25*$i);
+    }
+
+    return($j);
+}
+
+sub date2time()
+{
+    my ($Y,$M,$D,$h,$m,$s) = @_;
+    return(86400*(date2julian($Y,$M,$D)-2440588) + 3600*$h + 60*$m + $s);
+}
+

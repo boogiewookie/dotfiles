@@ -1,0 +1,29 @@
+#!/usr/bin/env perl
+
+die q{
+usage: rand [[LO] HI]
+Generate a random number using /dev/urandom.  With no arguments
+prints 32 random bits as both an unsigned and a float 0 <= x < 1.
+With one arguments, prints an integer 0 <= x < HI.  With two, it
+prints an integer LO <= x <= HI.
+} if (@ARGV > 0 && $ARGV[0] !~ /[0-9-]/);
+
+open(R,"/dev/urandom") || die "Can't open /dev/urandom: $!\n";
+die "Can't read from /dev/urandom: $!\n" unless(sysread(R, $random, 4) == 4);
+close(R);
+$lrandom = unpack("L",$random);
+$frandom = $lrandom / 4294967296.0;
+if (@ARGV == 2)
+{
+	$random = $ARGV[0] + int(($ARGV[1] - $ARGV[0] + 1) * $frandom);
+	printf "%d\n",$random;
+}
+elsif (@ARGV == 1)
+{
+	$random = int($ARGV[0] * $frandom);
+	printf "%d\n",$random;
+}
+else
+{
+	printf "%12.10f 0x%08x\n",$frandom,$lrandom;
+}

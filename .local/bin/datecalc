@@ -1,0 +1,28 @@
+#!/usr/bin/env perl
+use Date::Manip;
+die "usage: datecalc T0  {- T1 | [+-] DAYS}\n"
+    unless(@ARGV);
+
+my $str = join(' ',@ARGV);
+my ($d1,$op,$d2) = $str =~ /(\S+)(?:\s*([-+])\s*(\S+))/;
+
+if ($d2 =~ m{[-/]})
+{
+	$d1 = ParseDate($d1);
+	$d2 = ParseDate($d2);
+	my $err;
+	my $delta = DateCalc($d2,$d1,\$err);
+	print Delta_Format($delta,'approx',0,"%dd"),"\n";
+
+}
+elsif ($op ne '')
+{
+	$d2 .= " days" if ($d2 =~ /[\s\d]+$/);
+	my $date = DateCalc($d1,"$op $d2");
+	print UnixDate($date,"%Y-%m-%d\n");
+}
+else
+{
+	my $date = ParseDate($str);
+	print UnixDate($date,"%Y-%m-%d\n");
+}
