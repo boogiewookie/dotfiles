@@ -35,7 +35,7 @@ if [ -n "$BASH_VERSION" ]; then
     # If xterm set the title to 'host$ pwd as user' (or 'host# pwd as root')
     case "$TERM" in
     xterm*|rxvt*|screen)
-        PS1="\[\033]0;\h\$ \w as \u\007\]$PS1" ;;
+        PS1="\[\033]0;\h\$ \w as \u\007\]${VIRTUAL_ENV_PROMPT:-}\u@\h\$ " ;;
     esac
 else
     SIGL='$'
