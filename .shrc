@@ -55,7 +55,8 @@ fi
 # Add some aliases
 alias cdbt='cd /usr/local/bastille/templates/metamaya'
 alias cdrt='cd /usr/local/rocinante/templates/metamaya'
-alias resource='command bedunc'
+alias bedunc='. ~/.profile'
+alias resource='. ~/.profile'
 alias h='fc -l'
 alias history='fc -l'
 alias ls='ls -F'
