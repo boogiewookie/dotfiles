@@ -1,0 +1,19 @@
+#!/bin/sh
+kk () {
+    case $1 in
+    3|ll) konsole -geometry 823x536-838-30 &  ;;
+    0|lr) konsole -geometry 823x536-0-30 &    ;;
+    2|ul) konsole -geometry 823x536-838-638 & ;;
+    1|ur) konsole -geometry 823x536-0-638 &   ;;
+    esac
+}
+cd
+if [ "$@" ]; then
+    for x in "$@"; do
+        kk $x
+    done
+else
+    for x in ll lr ul ur; do
+        kk $x
+    done
+fi

@@ -1,0 +1,8 @@
+#!/bin/sh
+profile=`ls -d -1 /home/dunc/.mozilla/firefox/*.Phantom | head -1`
+if test -L "$profile/lock"
+then
+	exec firefox -P Phantom "$1" 2>/dev/null
+else
+	exec firefox -P Phantom --new-instance "$1" 2>/dev/null
+fi
