@@ -1,0 +1,2 @@
+#!/bin/sh
+(cd $YADM_HOOK_WORK/.local/share/nvim/lazy/nvim-ghost.nvim && python -m pip install -r requirements.txt)
