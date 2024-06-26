@@ -279,4 +279,6 @@ activate () {
 [ -f ~/.git-completion.bash ] && . ~/.git-completion.bash
 
 # Finally let ~/.shrc.local add or override anything unique to this user
-[ -f ~/.shrc.local ] && .  ~/.shrc.local
+if [ -f ~/.shrc.local ]; then
+    .  ~/.shrc.local
+fi
