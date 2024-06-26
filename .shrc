@@ -62,7 +62,6 @@ alias history='fc -l'
 alias ls='ls -F'
 alias outofdate='pkg_version -vIL='
 alias psg='pgrep -l'
-alias vi=choosevi
 alias vim=choosevi
 alias vimpass="cfs && vim -n $DUNC/encfs/cfs/sessame.txt"
 alias rpm='echo "You mean to say: lrpm"'
