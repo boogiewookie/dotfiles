@@ -10,5 +10,3 @@
 
 # set ENV to a file invoked each time sh is started.
 ENV=$HOME/.shrc; export ENV
-
-. $ENV
