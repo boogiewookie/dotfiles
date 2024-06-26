@@ -8,7 +8,11 @@ vim.cmd('set background=light')
 -- Global Settings
 vim.g.mapleader = ' '  -- Setting the leader key
 vim.g.nvim_ghost_use_script = 1
-vim.g.nvim_ghost_python_executable = "/usr/bin/python"
+{% if yadm.os == "FreeBSD" %}
+vim.g.nvim_ghost_python_executable = "/usr/local/bin/python3"
+{% else %}
+vim.g.nvim_ghost_python_executable = "/usr/bin/python3"
+{% endif %}
 
 -- Keymap Variables
 local rm = vim.keymap.set
