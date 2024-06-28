@@ -1,6 +1,6 @@
 # run by every shell
 unalias -a	# get rid of any nonsense .profile set
-PATH=~/.local/bin:~/opt/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:/usr/lib:/usr/games:/snap/bin:/home/dunc/encfs/stm/bin
+PATH=~/.local/bin:~/bin:~/opt/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:/usr/lib:/usr/games:/snap/bin:/home/dunc/encfs/stm/bin
 
 # Interactive only beyond this test
 case "$-" in
@@ -9,23 +9,27 @@ case "$-" in
 esac
 
 # Set some preferences
-export DUNC=~dunc
-export VISUAL='vim'
-export EDITOR='vim'
-export EXINIT=':set ts=4 sw=4 ai nows'
-export PAGER='less -e'
-export MANPAGER=less
-export BLOCKSIZE="M"
-export CDPATH=".:/usr/local:$DUNC/src/NetBeans:$DUNC/src/finance:$DUNC/src/cgi:$DUNC/src:/usr/local/www:$DUNC/diary:$DUNC:$DUNC/Documents:$DUNC/Export:$DUNC/Export/Misc:$DUNC/Textarch:/usr/local/bastille/templates/metamaya:${LOCALCDPATH:-}"
-export CVSIGNORE='.git/'
-export KEVETSCHWAB='Kevet-RothIRA.ofx Kevet-SchwabIRA.ofx Kevet-InheritedIRA.ofx Kevet-SchwabOne.ofx Kevet-PledgedAsset.ofx'
-export SANDYSCHWAB='Sandy-SchwabIRA.ofx Sandy-SchwabOne.ofx Sandy-InheritedIRA.ofx Sandy-InheritedRoth.ofx Sandy-SchwabTaxable.ofx'
-export SCHWABOFX="$KEVETSCHWAB $SANDYSCHWAB"
-export SCHWABPDF="`echo $SCHWABOFX | sed 's/ofx/pdf/g'`"
-export SCHWABCSV="`echo $SCHWABOFX | sed 's/ofx/csv/g'`"
-export PYTHONPATH=$PYTHONPATH:$HOME/opt/lib/python3.8/site-packages
-export PGHOST=localhost
-export NO_COLOR=exactly
+if [ -d ~dunc ]; then
+    DUNC=~dunc ; export DUNC
+else
+    DUNC= ; export DUNC
+fi
+VISUAL='vim' ; export VISUAL
+EDITOR='vim' ; export EDITOR
+EXINIT=':set ts=4 sw=4 ai nows' ; export EXINIT
+PAGER='less -e' ; export PAGER
+MANPAGER=less ; export MANPAGER
+BLOCKSIZE="M" ; export BLOCKSIZE
+CDPATH=".:/usr/local:$DUNC/src/NetBeans:$DUNC/src/finance:$DUNC/src/cgi:$DUNC/src:/usr/local/www:$DUNC/diary:$DUNC:$DUNC/Documents:$DUNC/Export:$DUNC/Export/Misc:$DUNC/Textarch:/usr/local/bastille/templates/metamaya:${LOCALCDPATH:-}" ; export CDPATH
+CVSIGNORE='.git/' ; export CVSIGNORE
+KEVETSCHWAB='Kevet-RothIRA.ofx Kevet-SchwabIRA.ofx Kevet-InheritedIRA.ofx Kevet-SchwabOne.ofx Kevet-PledgedAsset.ofx' ; export KEVETSCHWAB
+SANDYSCHWAB='Sandy-SchwabIRA.ofx Sandy-SchwabOne.ofx Sandy-InheritedIRA.ofx Sandy-InheritedRoth.ofx Sandy-SchwabTaxable.ofx' ; export SANDYSCHWAB
+SCHWABOFX="$KEVETSCHWAB $SANDYSCHWAB" ; export SCHWABOFX
+SCHWABPDF="`echo $SCHWABOFX | sed 's/ofx/pdf/g'`" ; export SCHWABPDF
+SCHWABCSV="`echo $SCHWABOFX | sed 's/ofx/csv/g'`" ; export SCHWABCSV
+PYTHONPATH=$PYTHONPATH:$HOME/opt/lib/python3.8/site-packages ; export PYTHONPATH
+PGHOST=localhost ; export PGHOST
+NO_COLOR=exactly ; export NO_COLOR
 
 [ -f ~/.secrets ] && . ~/.secrets
 
@@ -55,8 +59,8 @@ fi
 # Add some aliases
 alias cdbt='cd /usr/local/bastille/templates/metamaya'
 alias cdrt='cd /usr/local/rocinante/templates/metamaya'
-alias bedunc='. ~/.profile'
-alias resource='. ~/.profile'
+alias resource='. ${HOME}/.shrc'
+alias bedunc='. ${DUNC:-$HOME}/.shrc'
 alias h='fc -l'
 alias history='fc -l'
 alias ls='ls -F'
@@ -85,7 +89,7 @@ choosevi () {
 Man () {
 	nroff -man $1 | $PAGER
 }
-export TO=$DUNC/src
+TO=$DUNC/src ; export TO
 to () {
 	if test "$1" = "-c"
 	then
@@ -93,7 +97,7 @@ to () {
 		dirs -c
 		cd "${1:-$TO}"
 	else
-		export popdir="$PWD";
+		popdir="$PWD"; ; export popdir
 		cd "${1:-$TO}";
 		destdir="$PWD";
 		cd "$popdir";

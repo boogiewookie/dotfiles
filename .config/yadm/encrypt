@@ -6,3 +6,4 @@
 .gnupg/pubring.kbx
 .gnupg/trustdb.gpg
 .secrets
+.credentials/*
