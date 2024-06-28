@@ -97,7 +97,8 @@ to () {
 		dirs -c
 		cd "${1:-$TO}"
 	else
-		popdir="$PWD"; ; export popdir
+		popdir="$PWD";
+        export popdir;
 		cd "${1:-$TO}";
 		destdir="$PWD";
 		cd "$popdir";
