@@ -1,0 +1,12 @@
+[Appearance]
+ColorScheme=BlackOnWhite
+Font=MesloLGSDZ Nerd Font,10,-1,5,50,0,0,0,0,0
+
+[General]
+LocalTabTitleFormat=%w
+Name=neon
+Parent=FALLBACK/
+RemoteTabTitleFormat=%w
+
+[Scrolling]
+HistoryMode=2
