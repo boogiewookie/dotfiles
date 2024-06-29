@@ -1,5 +1,5 @@
 # run by every shell
-unalias -a	# get rid of any nonsense .profile set
+unalias -a  # get rid of any nonsense .profile set
 PATH=~/.local/bin:~/bin:~/opt/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:/usr/lib:/usr/games:/snap/bin:/home/dunc/encfs/stm/bin
 
 # Interactive only beyond this test
@@ -49,11 +49,11 @@ else
 fi
 
 if ! which vim >/dev/null; then
-	alias vim="vi"
+    alias vim="vi"
 elif [ -f ~/.vimrc ]; then
-	alias vim="vim -u ~/.vimrc"
+    alias vim="vim -u ~/.vimrc"
 else
-	alias vim="vim -N"
+    alias vim="vim -N"
 fi
 
 # Add some aliases
@@ -87,114 +87,120 @@ choosevi () {
 }
 
 Man () {
-	nroff -man $1 | $PAGER
+    nroff -man $1 | $PAGER
 }
 TO=$DUNC/src ; export TO
 to () {
-	if test "$1" = "-c"
-	then
-		shift;
-		dirs -c
-		cd "${1:-$TO}"
-	else
-		popdir="$PWD";
+    if test "$1" = "-c"
+    then
+        shift;
+        dirs -c
+        cd "${1:-$TO}"
+    else
+        popdir="$PWD";
         export popdir;
-		cd "${1:-$TO}";
-		destdir="$PWD";
-		cd "$popdir";
-		for d in `dirs -l`
-		do
-			if test "`dirs -l +0`" = "$destdir"
-			then
-				dirs
-				return
-			fi
-			pushd -0 >/dev/null
-		done
-		pushd "$destdir"
-	fi
+        cd "${1:-$TO}";
+        destdir="$PWD";
+        cd "$popdir";
+        for d in `dirs -l`
+        do
+            if test "`dirs -l +0`" = "$destdir"
+            then
+                dirs
+                return
+            fi
+            pushd -0 >/dev/null
+        done
+        pushd "$destdir"
+    fi
 }
 ot () {
-	popd $1
+    popd $1
 }
 lookuppasswordfor () {
-	cfs
-	if test -f $DUNC/encfs/cfs/$1.txt
-	then
-		grep "$2" $DUNC/encfs/cfs/$1.txt
-	elif test -d $DUNC/Export/.encfs/cfs
-	then
-		encfsctl cat $DUNC/Export/.encfs/cfs $1.txt | grep "$2"
-	elif test -d $DUNC/Dropbox/.encfs/cfs
-	then
-		encfsctl cat $DUNC/Dropbox/.encfs/cfs $1.txt | grep "$2"
-	else
-		echo "There are no passwords mounted!"
-	fi
+    cfs
+    if test -f $DUNC/encfs/cfs/$1.txt
+    then
+        grep "$2" $DUNC/encfs/cfs/$1.txt
+    elif test -d $DUNC/Export/.encfs/cfs
+    then
+        encfsctl cat $DUNC/Export/.encfs/cfs $1.txt | grep "$2"
+    elif test -d $DUNC/Dropbox/.encfs/cfs
+    then
+        encfsctl cat $DUNC/Dropbox/.encfs/cfs $1.txt | grep "$2"
+    else
+        echo "There are no passwords mounted!"
+    fi
 }
 pass () { 
-	lookuppasswordfor sessame "$1"
+    lookuppasswordfor sessame "$1"
 }
 bpass () { 
-	lookuppasswordfor brandon "$1"
+    lookuppasswordfor brandon "$1"
 }
 cpass () { 
-	lookuppasswordfor carlton "$1"
+    lookuppasswordfor carlton "$1"
 }
 spass () { 
-	lookuppasswordfor sandy "$1"
+    lookuppasswordfor sandy "$1"
 }
 cal () {
-	/usr/bin/cal ${1:--3}
+    /usr/bin/cal ${1:--3}
 }
 ncal () {
-	/usr/bin/ncal ${1:--3}
+    /usr/bin/ncal ${1:--3}
 }
 errno () {
-	for f in \
-		/usr/include/sys/errno.h \
-		/usr/include/asm/errno.h \
-		/usr/src/lib/libc/gen/errlst.c \
-		/usr/include/bsd/errno.h \
-		/usr/include/asm-generic/errno-base.h \
-		/usr/include/asm-generic/errno.h \
-		/usr/include/asm-generic/errno-base.h \
-		#leave this comment right here so the list of files above is easy to change
-	do
-		if test -f "$f" && grep -i -w "$1" "$f"
-		then
-			break
-		fi
-	done
+    for f in \
+        /usr/include/sys/errno.h \
+        /usr/include/asm/errno.h \
+        /usr/src/lib/libc/gen/errlst.c \
+        /usr/include/bsd/errno.h \
+        /usr/include/asm-generic/errno-base.h \
+        /usr/include/asm-generic/errno.h \
+        /usr/include/asm-generic/errno-base.h \
+        #leave this comment right here so the list of files above is easy to change
+    do
+        if test -f "$f" && grep -i -w "$1" "$f"
+        then
+            break
+        fi
+    done
 }
 li () { encfs -i 45 /net/servo/stm $DUNC/encfs/stm; bedunc; }
 lo () {
-	if test `uname -s` = 'FreeBSD'
-	then
-		umount $DUNC/encfs/cfs
-		umount $DUNC/encfs/stm
-	else
-		fusermount -u $DUNC/encfs/cfs
-		fusermount -u $DUNC/encfs/stm
-	fi
+    if test `uname -s` = 'FreeBSD'
+    then
+        umount $DUNC/encfs/cfs
+        umount $DUNC/encfs/stm
+    else
+        fusermount -u $DUNC/encfs/cfs
+        fusermount -u $DUNC/encfs/stm
+    fi
 }
 ll () {
-	if test -n "$1"
-	then
-		if test -f "/var/log/$1"
-		then
-			less +F "/var/log/$1"
-		elif test -f "/var/log/$1.log"
-		then
-			less +F "/var/log/$1.log"
-		fi
-	elif test -f /var/log/messages
-	then
-		less +F /var/log/messages
-	elif test -f /var/log/syslog
-	then
-		less +F /var/log/syslog
-	fi
+    if [ -n "$1" ]; then
+        if [ -f "/var/log/$1" ]; then
+            less +F "/var/log/$1"
+        elif [ -f "/var/log/$1.log" ]; then
+            less +F "/var/log/$1.log"
+        elif [ "$1" = "http" ]; then
+            if [ -d "/var/log/nginx" ]; then
+                less +F "/var/log/nginx/error.log"  "/var/log/nginx/access.log"
+            fi
+        elif [ "$1" = "wiki" ]; then
+            logs="/usr/local/www/foswiki/working/logs"
+            if [ -d "$logs" ]; then
+                less +F "$logs/error.log" "$logs/debug.log" "$logs/events.log" "$logs/configure.log"
+            fi
+        fi
+    elif test -f /var/log/messages
+    then
+        less +F /var/log/messages
+    elif test -f /var/log/syslog
+    then
+        less +F /var/log/syslog
+    fi
 }
 lh () {
     if test -f /var/log/httpd-access.log
@@ -206,77 +212,77 @@ lh () {
     fi
 }
 formatcc () {
-	cc "$@" |
-	sed '/^[\t ]*$/d' |
-	indent -st -nbad -bap -nbc -br -c33 -cd33 -ncdb -ce -ci4 -cli0 -d0 -di1 -nfc1 -i4 -l78 -lp -npcs -psl -sc -sob
+    cc "$@" |
+    sed '/^[\t ]*$/d' |
+    indent -st -nbad -bap -nbc -br -c33 -cd33 -ncdb -ce -ci4 -cli0 -d0 -di1 -nfc1 -i4 -l78 -lp -npcs -psl -sc -sob
 }
 #function seepp () { (formatcc -E $1 | c++filt) |& less; }
 seepp () { (formatcc -E $1) 2>&1 | less; }
 seeasm () { (gcc -S -o - $1 | c++filt) 2>&1 | less; }
 seepredef () { (echo "" | cc -E -dM -) 2>&1 | less; }
 canrun () {
-	which "$1" 1>/dev/null 
+    which "$1" 1>/dev/null 
 }
 kv () {
-	killall -9 -q vlc
+    killall -9 -q vlc
 }
 sweep () {
-	kv
-	if canrun xclip
-	then
-		xclip -i -selection c < /dev/null
-		xclip -i -selection p < /dev/null
-	fi
-	history -c
-	history -w
-	rm -rf \
-		${HOME}/.bash_history \
-		${HOME}/.thumbnails \
-		${HOME}/.cache/thumbnails \
-		${HOME}/.vim/.netrwhist \
-		${HOME}/.viminfo \
-		${HOME}/.xsession-errors \
-		${HOME}/.local/share/recently-used.xbel \
-		${HOME}/.config/ghb/EncodeLogs \
-		${HOME}/.config/ghb/Activity.log.* \
-		${HOME}/.config/ghb/ghb.pid.* \
-		${HOME}/.config/picty/log \
-		${HOME}/.config/gthumb/history.xbel \
-		#leave me here
-	if canrun clipit
-	then
-		killall clipit
-		clipit &
-	fi
-	history -c
-	dirs -c
+    kv
+    if canrun xclip
+    then
+        xclip -i -selection c < /dev/null
+        xclip -i -selection p < /dev/null
+    fi
+    history -c
+    history -w
+    rm -rf \
+        ${HOME}/.bash_history \
+        ${HOME}/.thumbnails \
+        ${HOME}/.cache/thumbnails \
+        ${HOME}/.vim/.netrwhist \
+        ${HOME}/.viminfo \
+        ${HOME}/.xsession-errors \
+        ${HOME}/.local/share/recently-used.xbel \
+        ${HOME}/.config/ghb/EncodeLogs \
+        ${HOME}/.config/ghb/Activity.log.* \
+        ${HOME}/.config/ghb/ghb.pid.* \
+        ${HOME}/.config/picty/log \
+        ${HOME}/.config/gthumb/history.xbel \
+        #leave me here
+    if canrun clipit
+    then
+        killall clipit
+        clipit &
+    fi
+    history -c
+    dirs -c
 }
 off () {
-	cd
-	if canrun wiki
-	then
-		wiki stop
-	fi
-	kv
-	lo
-	sweep
-	bedunc
-	echo -e \\033c
+    cd
+    if canrun wiki
+    then
+        wiki stop
+    fi
+    kv
+    lo
+    sweep
+    bedunc
+    echo -e \\033c
 }
 activate () {
-	if test -e .venv/bin/activate
-	then
-		. .venv/bin/activate
-	elif test -e venv/bin/activate
-	then
-		. venv/bin/activate
-	elif test -e env/bin/activate
-	then
-		. env/bin/activate
-	elif test -e bin/activate
-	then
-		. bin/activate
-	fi
+    if test -e .venv/bin/activate
+    then
+        . .venv/bin/activate
+    elif test -e venv/bin/activate
+    then
+        . venv/bin/activate
+    elif test -e env/bin/activate
+    then
+        . env/bin/activate
+    elif test -e bin/activate
+    then
+        . bin/activate
+    fi
 }
 
 # Add tab completions for git if you have them
