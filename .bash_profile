@@ -1,4 +1,4 @@
-logger "$PWD/.profile ran"
+logger "$PWD/.bash_profile ran"
 # ~/.profile: executed by the command interpreter for login shells.
 # This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
 # exists.
@@ -10,4 +10,4 @@ logger "$PWD/.profile ran"
 #umask 022
 
 # set ENV to a file invoked each time sh is started.
-ENV=$HOME/.shrc; export ENV
+BASH_ENV=$HOME/.shrc; export BASH_ENV
