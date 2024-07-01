@@ -11,3 +11,4 @@ logger "$PWD/.profile ran"
 
 # set ENV to a file invoked each time sh is started.
 ENV=$HOME/.shrc; export ENV
+BASH_ENV=$HOME/.shrc; export BASH_ENV
