@@ -1,6 +1,0 @@
-#!/bin/sh
-GHOST=$HOME/.local/share/nvim/lazy/nvim-ghost.nvim
-if [ "$(uname -s)" = "FreeBSD" ] && [ -d $GHOST ]; then
-    cd $GHOST
-    python -m pip install -r requirements.txt
-fi
