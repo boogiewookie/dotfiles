@@ -1,0 +1,6 @@
+[submodule ".local/share/nvim/lazy/nvim-ghost.nvim##os.FreeBSD"]
+	path = ".local/share/nvim/lazy/nvim-ghost.nvim##os.FreeBSD"
+	url = https://github.com/subnut/nvim-ghost.nvim.git
+[submodule ".local/share/nvim/lazy/nvim-ghost.nvim"]
+	path = .local/share/nvim/lazy/nvim-ghost.nvim
+	url = https://github.com/subnut/nvim-ghost.nvim.git
