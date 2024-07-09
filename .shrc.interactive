@@ -264,18 +264,10 @@ off () {
     echo -e \\033c
 }
 activate () {
-    if test -e .venv/bin/activate
+    activate=$(find . -path '*/bin/activate')
+    if [ "$activate" ]
     then
-        . .venv/bin/activate
-    elif test -e venv/bin/activate
-    then
-        . venv/bin/activate
-    elif test -e env/bin/activate
-    then
-        . env/bin/activate
-    elif test -e bin/activate
-    then
-        . bin/activate
+        . "$activate"
     fi
 }
 logger "$PWD/.shrc after funcs"   #FIXME
