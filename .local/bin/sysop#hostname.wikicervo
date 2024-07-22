@@ -1,0 +1,35 @@
+#!/bin/sh
+case "$1" in
+foswiki) cat <<EOF ;;
+  * service foswiki restart
+  * service foswiki status
+EOF
+nginx) cat <<EOF ;;
+  * less /var/log/nginx/access.log
+  * less /var/log/nginx/error.log
+  * service nginx restart
+  * service nginx status
+EOF
+postgres|pgsql|postgresql) cat <<EOF ;;
+Listen IPs are set in /etc/postgresql/12/main/postgresql.conf while /etc/postgresql/12/main/pg_hba.conf controls which IPs and users cann connect. The crontab for user postgres runs ~/pg_backup_rotated.sh daily to keep recent backups in /var/lib/postgresql/backups.
+  * less /var/log/postgresql/postgresql-12-main.log
+  * service postgresql restart
+  * service postgresql status
+EOF
+statements|uwsgi) cat <<EOF ;;
+/usr/local/etc/statements/uwsgi.ini on wiki
+  * service uwsgi restart # /usr/local/etc/statements/uwsgi.ini on wiki
+EOF
+vouch-proxy|vp) cat <<EOF ;;
+/usr/local/etc/vouch-proxy/config.yml
+  * less /var/log/vouchproxy.log
+  * service vouch-proxy restart
+  * sysrc vouchproxy_enable=YES
+EOF
+wireguard|wg) cat <<EOF ;;
+  * systemctl enable wg-quick@wg0
+  * systemctl start wg-quick@wg0
+EOF
+*) echo "sysop [foswiki nginx postgres statements vouch-proxy wireguard]" ;;
+esac
+exit 0
