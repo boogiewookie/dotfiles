@@ -1,4 +1,4 @@
-logger "$PWD/.shrc started $-" #FIXME
+logger "$PWD/.shrc commences $-" #FIXME
 # run by every shell
 unalias -a  # get rid of any nonsense .profile set
 PATH=~/.local/bin:~/bin:~/opt/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:/usr/lib:/usr/games:/snap/bin:/home/dunc/encfs/stm/bin
@@ -10,3 +10,5 @@ esac
 
 # Finally let ~/.shrc.local add or override anything unique to this user
 [ -f $HOME/.shrc.local ] && . $HOME/.shrc.local
+
+logger "$PWD/.shrc concludes $-" #FIXME

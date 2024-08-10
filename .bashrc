@@ -1,4 +1,4 @@
-logger "$PWD/.bashrc ran"
+logger "$PWD/.bashrc commences"
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -105,3 +105,4 @@ _extract_complete() {
 complete -F _extract_complete extract.py
 fi
 
+logger "$PWD/.bashrc concludes"

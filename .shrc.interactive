@@ -1,4 +1,4 @@
-logger "$PWD/.shrc.interactive started" ##FIXME
+logger "$PWD/.shrc.interactive commences" ##FIXME
 
 # Set some preferences
 if [ -d ~dunc ]; then
@@ -275,3 +275,4 @@ logger "$PWD/.shrc.interactive after funcs"   #FIXME
 # Add tab completions for git if you have them
 [ -f ~/.git-completion.bash ] && . ~/.git-completion.bash
 
+logger "$PWD/.shrc.interactive concludes" ##FIXME
