@@ -1,4 +1,4 @@
-logger "$PWD/.shrc.interactive ran" ##FIXME
+logger "$PWD/.shrc.interactive started" ##FIXME
 
 # Set some preferences
 if [ -d ~dunc ]; then
@@ -23,7 +23,7 @@ PYTHONPATH=$PYTHONPATH:$HOME/opt/lib/python3.8/site-packages ; export PYTHONPATH
 PGHOST=localhost ; export PGHOST
 NO_COLOR=exactly ; export NO_COLOR
 
-logger "$PWD/.shrc after exports"   #FIXME
+logger "$PWD/.shrc.interactive after exports"   #FIXME
 [ -f ~/.secrets ] && . ~/.secrets
 
 # set a sane prompt
@@ -68,7 +68,7 @@ alias zb='zl -t bookmark'
 alias ze='zl -o space,encryption,encryptionroot,keyformat,keylocation,keystatus,mountpoint,mounted'
 alias zs='zl -t snapshot'
 alias zm='zl -o name,used,mountpoint,canmount,mounted'
-logger "$PWD/.shrc after aliases"   #FIXME
+logger "$PWD/.shrc.interactive after aliases"   #FIXME
 
 choosevi () {
     if which nvim >/dev/null; then
@@ -270,7 +270,7 @@ activate () {
         . "$activate"
     fi
 }
-logger "$PWD/.shrc after funcs"   #FIXME
+logger "$PWD/.shrc.interactive after funcs"   #FIXME
 
 # Add tab completions for git if you have them
 [ -f ~/.git-completion.bash ] && . ~/.git-completion.bash
