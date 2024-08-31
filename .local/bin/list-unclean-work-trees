@@ -1,0 +1,8 @@
+#!/bin/sh
+here=$(realpath ${1:-.})
+for dir in $(find "$here" -name .git -exec dirname {} \;)
+do
+    cd "$dir"
+    [ $(git status --porcelain -uno  | wc -l) -gt 0 ] && echo "$dir"
+done
+
