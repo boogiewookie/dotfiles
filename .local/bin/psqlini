@@ -2,7 +2,8 @@
 use Config::Tiny;
 my $db = shift @ARGV;
 my $home = glob("~" . `whoami`);	# kludge around su -m not setting HOME
-my $config = Config::Tiny->read("$home/.database.ini");
+my $config = Config::Tiny->read("$home/.database.ini") or die "can't read $home/.database.ini: $!";
+die "usage: psqlini {" . join(" ", keys(%{$config})) . "}\n" unless ($config->{$db});
 my $p = $config->{$db}->{password};
 my $u = $config->{$db}->{user};
 my $h = $config->{$db}->{host};
