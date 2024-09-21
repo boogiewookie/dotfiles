@@ -1,0 +1,12 @@
+#!/usr/bin/env perl
+use Config::Tiny;
+my $db = shift @ARGV;
+my $home = glob("~" . `whoami`);	# kludge around su -m not setting HOME
+my $config = Config::Tiny->read("$home/.database.ini");
+my $p = $config->{$db}->{password};
+my $u = $config->{$db}->{user};
+my $h = $config->{$db}->{host};
+my @c = map("'$_'", @ARGV);
+unshift(@c, "PGPASSWORD='$p' psql -h '$h' -d '$db' -U '$u'");
+exec "@c";
+0;
