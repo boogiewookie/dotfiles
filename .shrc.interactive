@@ -178,6 +178,8 @@ ll () {
             less +F "/var/log/$1"
         elif [ -f "/var/log/$1.log" ]; then
             less +F "/var/log/$1.log"
+        elif [ -f "/var/log/${1}log" ]; then
+            less +F "/var/log/${1}log"
         elif [ "$1" = "http" ]; then
             if [ -d "/var/log/nginx" ]; then
                 less +F "/var/log/nginx/error.log"  "/var/log/nginx/access.log"
