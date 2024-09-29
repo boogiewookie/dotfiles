@@ -14,10 +14,10 @@ if_exists_show () {
 }
 
 #linux
+if_exists_show /usr/bin/lsb_release -s -d -c
 if_exists_show /usr/bin/uname -a
-if_exists_show /usr/bin/lsb_release -c -i -r
 if_exists_show /etc/debian_version
 
 #freebsd
-if_exists_show /bin/uname -a
 if_exists_show /bin/freebsd-version
+if_exists_show /bin/uname -a
