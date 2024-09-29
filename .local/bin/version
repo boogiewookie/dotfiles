@@ -2,22 +2,19 @@
 if_exists_show () {
 	if test -x $1
 	then
-		echo
-		echo "# $@"
 		$@
 	elif test -f $1
 	then
-		echo
-		echo "# cat $1"
 		cat $1
 	fi
 }
 
 #linux
 if_exists_show /usr/bin/lsb_release -s -d -c
-if_exists_show /usr/bin/uname -a
 if_exists_show /etc/debian_version
 
 #freebsd
 if_exists_show /bin/freebsd-version
-if_exists_show /bin/uname -a
+
+#all
+uname -a
