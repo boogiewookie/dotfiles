@@ -1,0 +1,9 @@
+#!/bin/sh
+if ! -d ~dunc/src/datebooker/.datebooker || ! -f ~dunc/.dates
+then
+    echo "wrong system, try neon"
+    exit 1
+fi
+cd ~dunc/src/datebooker
+.datebooker/bin/python3 datebooker | datebook -c -h - /home/dunc/.dates > datebook.html
+scp datebook.html www@cervo:/usr/local/www/data
