@@ -3,9 +3,11 @@ if_exists_show () {
 	if test -x $1
 	then
 		$@
+        echo " -- "
 	elif test -f $1
 	then
 		cat $1
+        echo " -- "
 	fi
 }
 
@@ -16,5 +18,5 @@ if_exists_show /etc/debian_version
 #freebsd
 if_exists_show /bin/freebsd-version
 
-#all
+#any os
 uname -a
