@@ -7,6 +7,7 @@ import configparser, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk #, Gdk, GdkPixbuf, GLib
+from urllib.parse import urlparse
 
 def escape(s):
     return s.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
@@ -76,6 +77,8 @@ class TagURIt(Gtk.Window):
         self.url_entry = Gtk.Entry()
         self.url_entry.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY,"edit-clear")
         self.url_entry.connect("icon_press",self.on_clear_icon_clicked)
+        self.url_entry.connect("changed",self.on_url_changed)
+        self.url_entry.connect("paste-clipboard",self.on_url_changed)
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         hbox.pack_start(Gtk.Label.new("URL"), False, False, 0)
         hbox.pack_start(self.url_entry, True, True, 0)
@@ -337,6 +340,15 @@ class TagURIt(Gtk.Window):
 
     def on_filter_activate(self,entry):
         self.refilter_items()
+
+    def on_url_changed(self,entry):
+        if self.get_title() == '':
+            title = urlparse(entry.get_text()).netloc
+            if title.startswith("www."):
+                title = title[4:]
+            if title.endswith(".com") or title.endswith(".org"):
+                title = title[:-4]
+            self.set_title(title)
 
     def on_regex_activate(self,entry):
         self.refilter_items()
