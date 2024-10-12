@@ -342,8 +342,10 @@ class TagURIt(Gtk.Window):
         self.refilter_items()
 
     def on_url_changed(self,entry):
-        if self.get_title() == '':
+        if self.get_title() == '':  #guess a candidate title
             title = urlparse(entry.get_text()).netloc
+            if title == "github.com":
+                title = urlparse(entry.get_text()).path[1:].partition('/')[0]
             if title.startswith("www."):
                 title = title[4:]
             if title.endswith(".com") or title.endswith(".org"):
