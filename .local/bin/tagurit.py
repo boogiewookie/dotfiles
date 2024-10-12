@@ -366,8 +366,9 @@ class TagURIt(Gtk.Window):
     def is_item_visible(self,model,treeiter,data):
         iid,title,url,notes,tags = model[treeiter]
         if self.visible_tagset:
-            url_tagset = {x for x in tags.split()}
-            if not self.visible_tagset <= url_tagset:
+            item_tagset = {x for x in tags.split()}
+            item_tagset |= {x.split(':', 1)[0] for x in item_tagset if ':' in x}
+            if not self.visible_tagset <= item_tagset:
                 return False
         if self.regex:
             if not self.regex.search(title) \
