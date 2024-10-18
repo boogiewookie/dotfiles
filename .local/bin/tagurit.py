@@ -348,7 +348,8 @@ class TagURIt(Gtk.Window):
                 title = urlparse(entry.get_text()).path[1:].partition('/')[0]
             if title.startswith("www."):
                 title = title[4:]
-            if title.endswith(".com") or title.endswith(".org"):
+            if any([title.endswith(x) for x in (
+                ".com", ".org" ,".net",".gov", ".edu")]):
                 title = title[:-4]
             self.set_title(title)
 
