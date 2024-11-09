@@ -7,3 +7,4 @@
 .gnupg/trustdb.gpg
 .secrets
 .credentials/*
+.config/rclone/rclone.conf
