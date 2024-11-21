@@ -4,7 +4,7 @@ Font=MartianMono Nerd Font,10,-1,5,50,0,0,0,0,0
 TabColor=128,255,128
 
 [General]
-Command=/usr/bin/ssh -Y -A root@gogo.metamaya.com
+Command=ssh -Y -A root@gogo.metamaya.com
 LocalTabTitleFormat=%u@%h %d
 Name=root@gogo
 Parent=FALLBACK/
