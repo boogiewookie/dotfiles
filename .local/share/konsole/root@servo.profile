@@ -1,11 +1,1 @@
-[Appearance]
-ColorScheme=BlackOnWhite
-Font=MartianMono Nerd Font,10,-1,5,50,0,0,0,0,0
-TabColor=128,255,255
-
-[General]
-Command=/usr/bin/ssh -Y -A root@servo.metamaya.com
-LocalTabTitleFormat=%u@%h %d
-Name=root@servo
-Parent=FALLBACK/
-RemoteTabTitleFormat=%w
+root@servo.profile##default

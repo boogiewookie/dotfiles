@@ -1,11 +1,1 @@
-[Appearance]
-ColorScheme=BlackOnWhite
-Font=MartianMono Nerd Font,10,-1,5,50,0,0,0,0,0
-TabColor=255,255,0
-
-[General]
-Command=/usr/bin/ssh -Y -A dunc@thinktank.metamaya.com
-LocalTabTitleFormat=%u@%h %d
-Name=thinktank
-Parent=FALLBACK/
-RemoteTabTitleFormat=%w
+thinktank.profile##default
