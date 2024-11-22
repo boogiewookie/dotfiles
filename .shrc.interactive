@@ -168,10 +168,12 @@ lo () {
         umount $DUNC/encfs/cfs
         umount $DUNC/encfs/stm
         umount $DUNC/encfs/sfs
+        umount ~/.cache/securefs
     else
         fusermount -u $DUNC/encfs/cfs
         fusermount -u $DUNC/encfs/stm
         fusermount -u $DUNC/encfs/sfs
+        fusermount -u ~/.cache/securefs
     fi
 }
 ll () {
