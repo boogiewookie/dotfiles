@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+DUNC=~dunc
+SFS=$DUNC/encfs/securefs
+if [ `whoami` = 'dunc' ] ; then
+    mkdir -p  ~/.cache/securefs/  ~/encfs/securefs
+    if ! [ -f ~/.cache/securefs/.config.pb ]; then
+        rclone mount --daemon --vfs-cache-mode writes r2:securefs ~/.cache/securefs
+    fi
+	if ! [ -f "$SFS/.ismounted" ]; then
+		secret-tool lookup cfs dunc | securefs mount --background --askpass ~/.cache/securefs $SFS
+	fi
+	if [ -f "$SFS/.ismounted" ]; then
+		if which ssh-keygen >/dev/null; then
+			if which sha256sum >/dev/null; then
+				I=$DUNC/.ssh/id_ed25519
+				if [ -f $I ]; then
+					F="$SFS/ssh/$( ssh-keygen -l -f $I | cut -d ' ' -f 3 )-$(ssh-keygen -l -f $I | sha256sum | head -c 8)"
+					cp "$I" "$F"
+				fi
+			fi
+		fi
+		if which gpg2 >/dev/null; then
+			F=$SFS/sessame.txt
+			if [ -f $F ]; then
+				gpg2 -e -r metamaya_backup -a -o $DUNC/.sessame.txt.gpg --batch --yes $F
+			fi
+			F=$(echo $SFS/bitwarden_export_*.json | awk 'END {print $NF}')
+			if [ -f $F ]; then
+				gpg2 -e -r metamaya_backup -a -o $DUNC/.bitwarden.json.gpg --batch --yes $F
+			fi
+		fi
+	fi
+else
+	echo "begone `whoami`, you imposter"
+	exit 1
+fi

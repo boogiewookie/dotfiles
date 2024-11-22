@@ -1,0 +1,33 @@
+#!/usr/bin/env perl
+
+my %map;
+open(my $map, "<", "/etc/showdisks.rc") or die "can't open /etc/showdisks.rc: $!";
+while($_ = <$map>) {
+	@_ = split;
+	$map{$_[1]} = $_[0];
+}
+close($map);
+
+my %slot;
+my %desc;
+my %ident;
+my %label;
+open(my $log, "<", "/var/log/messages") or die "can't open /var/log/messages: $!";
+while($_ = <$log>) {
+	$slot{$1} = "slot$2" if (/(ada\d+) at .* scbus(\d+)/);
+	$desc{$1} = $2 if (/(ada\d+): (<.+>)/);
+	if (/(ada\d+): Serial Number (\S+)/) {
+		$ident{$1} = $2;
+		$label{$1} = $map{$2} or "n/a";
+	}
+}
+close($log);
+
+my @disks = @ARGV;
+@disks = map(/(ada\d+)\b/,glob("/dev/ada*")) unless(@disks);
+foreach my $disk (@disks) {
+	$disk =~ s:.*/::;
+	print "$disk	$slot{$disk}	$label{$disk}	$ident{$disk}	$desc{$disk}\n";
+}
+
+0;
