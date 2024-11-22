@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 DUNC=~dunc
-SFS=$DUNC/encfs/securefs
+SFS=$DUNC/encfs/sfs
 if [ `whoami` = 'dunc' ] ; then
     mkdir -p  ~/.cache/securefs/  ~/encfs/securefs
     if ! [ -f ~/.cache/securefs/.config.pb ]; then
         rclone mount --daemon --vfs-cache-mode writes r2:securefs ~/.cache/securefs
     fi
 	if ! [ -f "$SFS/.ismounted" ]; then
-		secret-tool lookup cfs dunc | securefs mount --background --askpass ~/.cache/securefs $SFS
+		secret-tool lookup cfs dunc | securefs mount --background --askpass --log ~/.cache/securefs.log ~/.cache/securefs $SFS
 	fi
 	if [ -f "$SFS/.ismounted" ]; then
 		if which ssh-keygen >/dev/null; then
