@@ -2,8 +2,8 @@
 
 my %map;
 while($_ = <DATA>) {
-	@_ = split;
-	$map{$_[1]} = $_[0];
+    @_ = split;
+    $map{$_[1]} = $_[0];
 }
 close($map);
 
@@ -13,20 +13,20 @@ my %ident;
 my %label;
 open(my $log, "<", "/var/log/messages") or die "can't open /var/log/messages: $!";
 while($_ = <$log>) {
-	$slot{$1} = "slot$2" if (/(ada\d+) at .* scbus(\d+)/);
-	$desc{$1} = $2 if (/(ada\d+): (<.+>)/);
-	if (/(ada\d+): Serial Number (\S+)/) {
-		$ident{$1} = $2;
-		$label{$1} = $map{$2} or "n/a";
-	}
+    $slot{$1} = "slot$2" if (/(da\d+) at .* scbus(\d+)/);
+    $desc{$1} = $2 if (/(ada\d+): (<.+>)/);
+    if (/(a?da\d+): Serial Number (\S+)/) {
+        $ident{$1} = $2;
+        $label{$1} = $map{$2} or "n/a";
+    }
 }
 close($log);
 
 my @disks = @ARGV;
-@disks = map(/(ada\d+)\b/,glob("/dev/ada*")) unless(@disks);
+@disks = map(/(a?da\d+)\b/,glob("/dev/ada* /dev/da*")) unless(@disks);;
 foreach my $disk (@disks) {
-	$disk =~ s:.*/::;
-	print "$disk	$slot{$disk}	$label{$disk}	$ident{$disk}	$desc{$disk}\n";
+    $disk =~ s:.*/::;
+    print "$disk    $slot{$disk}    $label{$disk}   $ident{$disk}   $desc{$disk}\n";
 }
 
 0;
@@ -42,3 +42,9 @@ danburite PN2334PBKP5RNT
 gypsum P4GSMPUC
 feldspar VKHRHWGX
 enstatite VLGZAVSY
+original VOLUME-3856
+birch VOLUME-13439
+cedar VOLUME-13438
+dogwood VOLUME-13441
+aspen VOLUME-13440
+
