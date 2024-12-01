@@ -1,5 +1,6 @@
+-- WARNING: make sure you're editing init.lua##template.default
 -- Error theme:
-vim.cmd('set background=light')
+vim.cmd('set background=dark')
 --0=========================================================================0
 -- █▀ █▀▀ ▀█▀ ▀█▀ █ █▄░█ █▀▀ █▀
 -- ▄█ ██▄ ░█░ ░█░ █ █░▀█ █▄█ ▄█
@@ -134,9 +135,9 @@ vim.opt.rtp:prepend(lazypath)                                -- Ends here, this 
 --0=========================================================================0
 require("lazy").setup({
     {
-        'yasukotelin/notelight', -- this is the theme
+        'ellisonleao/gruvbox.nvim', -- this is the theme
         config = function()
-            vim.cmd('colorscheme notelight') -- this applies the theme
+            vim.cmd('colorscheme gruvbox') -- this applies the theme
         end
     },
     {
