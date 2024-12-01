@@ -1,8 +1,7 @@
 #!/usr/bin/env perl
 
 my %map;
-open(my $map, "<", "/etc/showdisks.rc") or die "can't open /etc/showdisks.rc: $!";
-while($_ = <$map>) {
+while($_ = <DATA>) {
 	@_ = split;
 	$map{$_[1]} = $_[0];
 }
@@ -31,3 +30,15 @@ foreach my $disk (@disks) {
 }
 
 0;
+__END__
+sapphire WD-WCC4J1012856
+topaz W1H39PNJ
+ulexite 43F0194AS
+bloodstone WD-WMC1P0313583
+aquamarine WD-WCC1P1289078
+yag PN2338P4H9UT7C
+quartz WD-WCAW34131678
+danburite PN2334PBKP5RNT
+gypsum P4GSMPUC
+feldspar VKHRHWGX
+enstatite VLGZAVSY
