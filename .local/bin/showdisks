@@ -11,7 +11,7 @@ my %slot;
 my %desc;
 my %ident;
 my %label;
-open(my $log, "<", "/var/log/messages") or die "can't open /var/log/messages: $!";
+open(my $log, "-|", "dmesg") or die "can't open |dmesg";
 while($_ = <$log>) {
     $slot{$1} = "slot$2" if (/(da\d+) at .* scbus(\d+)/);
     $desc{$1} = $2 if (/(ada\d+): (<.+>)/);
