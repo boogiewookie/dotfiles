@@ -1,5 +1,6 @@
 .local/bin/pwdfor
 .ssh/*.pem
+.ssh/*.key
 .database.ini
 .gnupg/crls.d/
 .gnupg/private-keys-*/*
