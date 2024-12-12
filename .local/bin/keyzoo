@@ -1,1 +1,51 @@
-keyzoo##arch.x86_64,os.Linux
+#!/usr/bin/env perl
+# Linux:    apt install libcryptx-perl
+# FreeBSD:  pkg install p5-CryptX
+use strict;
+use warnings;
+use Fcntl;
+use SDBM_File;
+use Crypt::Digest::SHA256 qw{sha256_hex sha256};
+use Crypt::KeyWrap qw{aes_key_wrap aes_key_unwrap};
+
+my $usage = q{
+usage: keyzoo {store|lookup|clear|list} tag [tag ...]
+
+If $KEYZOO_TOKEN exists in the environment, it's hashed into the tags and keys, so it
+can act as a security token. If an attacker knows the tags and token, your secrets are
+lightly obfuscated. If some of them can be kept secret it should be pretty secure.
+};
+
+my $cmd = shift @ARGV || die $usage;
+my $tok = defined($ENV{KEYZOO_TOKEN}) ? $ENV{KEYZOO_TOKEN} : '';
+my $tag = sha256_hex($tok,@ARGV);
+my $kek = sha256($tag,$tok);    # security thru obscurity
+
+tie (my %h, 'SDBM_File', "$ENV{HOME}/.config/keyzoo.dbm", O_RDWR|O_CREAT, 0600)
+     || die $!;                    # Open dbm file
+
+if ($cmd eq 'store') {
+    print "Enter secret: ";
+    chomp(my $sec = <STDIN>);
+    $h{$tag} = unpack('H*',aes_key_wrap($kek,$sec));
+}
+elsif ($cmd eq 'lookup') {
+    my $sec = '';
+    if (defined($h{$tag})) {
+        $sec = eval {aes_key_unwrap($kek,pack('H*',$h{$tag}))} || '';
+    }
+    printf "$sec\n";
+}
+elsif ($cmd eq 'clear') {
+    delete $h{$tag};
+}
+elsif ($cmd eq 'list') {
+    while (my ($k, $v) = each %h) {       # Iterate over all keys in file
+        print "$k,$v\n"
+    }
+}
+else {
+    print $usage;
+}
+untie %h;                          # Flush and close the dbm file
+0;
