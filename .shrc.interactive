@@ -188,7 +188,7 @@ ll () {
             if [ -d "/var/log/nginx" ]; then
                 less +F "/var/log/nginx/error.log"  "/var/log/nginx/access.log"
             fi
-        elif [ "$1" = "wiki" ]; then
+        elif [ "$1" = "wiki" ] || [ "$1" = "foswiki" ]; then
             logs="/usr/local/www/foswiki/working/logs"
             if [ -d "$logs" ]; then
                 less +F "$logs/error.log" "$logs/debug.log" "$logs/events.log" "$logs/configure.log"
