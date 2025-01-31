@@ -345,7 +345,7 @@ class TagURIt(Gtk.Window):
         if self.get_title() == '':  #guess a candidate title
             title = urlparse(entry.get_text()).netloc
             if title == "github.com":
-                title = urlparse(entry.get_text()).path[1:].partition('/')[0]
+                title = urlparse(entry.get_text()).path.split('/')[-1]
             if title.startswith("www."):
                 title = title[4:]
             if any([title.endswith(x) for x in (
