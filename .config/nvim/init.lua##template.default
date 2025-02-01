@@ -156,7 +156,7 @@ require("lazy").setup({
         end
     },
     {
-        'subnut/nvim-ghost.nvim',
+        'GhostText/GhostText',
     },
     {
         'nathangrigg/vim-beancount',
