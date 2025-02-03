@@ -1,4 +1,3 @@
--- WARNING: make sure you're editing init.lua##template.default
 -- Error theme:
 vim.cmd('set background=dark')
 --0=========================================================================0
@@ -8,12 +7,6 @@ vim.cmd('set background=dark')
 
 -- Global Settings
 vim.g.mapleader = ' '  -- Setting the leader key
-vim.g.nvim_ghost_use_script = 1
-{% if yadm.os == "FreeBSD" %}
-vim.g.nvim_ghost_python_executable = "/usr/local/bin/python3"
-{% else %}
-vim.g.nvim_ghost_python_executable = "/usr/bin/python3"
-{% endif %}
 
 -- Keymap Variables
 local rm = vim.keymap.set
@@ -157,6 +150,10 @@ require("lazy").setup({
     },
     {
         'subnut/nvim-ghost.nvim',
+        config = function()
+            vim.g.nvim_ghost_use_script = 0
+            vim.g.nvim_ghost_python_executable = io.popen("which python3"):read("*a"):match("%S+")
+        end
     },
     {
         'nathangrigg/vim-beancount',
