@@ -3,7 +3,7 @@ DUNC=~dunc
 CFS=$DUNC/encfs/cfs
 if [ `whoami` = 'dunc' ] ; then
 	if ! [ -f "$CFS/.ismounted" ]; then
-		encfs --extpass="${EXTPASS:-secret-tool lookup cfs dunc}" -o nonempty -i 30 $DUNC/Export/.encfs/cfs $CFS
+		encfs --extpass="${EXTPASS:-keyzoo lookup cfs dunc}" -o nonempty -i 30 $DUNC/Export/.encfs/cfs $CFS
 	fi
 	if [ -f "$CFS/.ismounted" ]; then
 		if which ssh-keygen >/dev/null; then
