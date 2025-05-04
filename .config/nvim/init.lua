@@ -62,14 +62,9 @@ vim.opt.number = false
 vim.api.nvim_set_keymap('n', '<F3>', ':set hlsearch!<CR>', { noremap = true, silent = true })
 
 -- QOL:
--- Search centering
+-- Center the line with a search hit on screen
 rm('n', 'n', 'nzz')
 rm('n', 'N', 'Nzz')
--- Deleting letters going to vim.oid
-rm('n', 'x', '"_x')
-rm('v', 'x', '"_x')
--- format pasted line.
-rm('n', 'p', 'p==')
 
 -- page movement up/down
 rm('n', '<C-k>', '<S-Up>zz')
