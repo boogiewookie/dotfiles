@@ -1,0 +1,43 @@
+#!/usr/bin/env perl
+use Time::Piece;
+use Time::Seconds;
+use Clipboard;
+die "usage: diarycycle {cycle [week] | 2024-05-29}\nPuts output in the clipboard\n" unless(@ARGV > 0);
+my $date;
+if ($ARGV[0] =~ /\d\d\d\d-\d\d-\d\d/) {
+    $date = $ARGV[0];
+}
+else {
+    my $cycle = $ARGV[0];
+    my $week = $ARGV[1] || "0";
+    chomp($date = `calcudate 2024-03-08 +${cycle}c +${week}w}`);
+}
+print "Using $date\n";
+my $d = Time::Piece->strptime($date, "%Y-%m-%d");
+my $day1 = $d->strftime("%d %b %Y");
+$d += ONE_DAY;
+my $day2 = $d->strftime("%d %b %Y");
+$d += ONE_DAY;
+my $day3 = $d->strftime("%d %b %Y");
+$d += ONE_DAY;
+my $day4 = $d->strftime("%d %b %Y");
+$d += ONE_DAY;
+my $day5 = $d->strftime("%d %b %Y");
+$d += ONE_DAY;
+my $day6 = $d->strftime("%d %b %Y");
+$d += ONE_DAY;
+my $day7 = $d->strftime("%d %b %Y");
+
+my $overlay = "\n"x2 .
+" "x58 . "20" . " "x50 . '140002' .
+"\n"x3 .
+" "x16 . $day1 . " "x4 . $day2 . " "x5 . $day3 . " "x6 . $day4 . " "x5 . $day5 . " "x6 . $day6 . " "x5 . $day7 .
+"\n"x10 .
+" "x20 . "20" . " "x13 . "20" . " "x14 . "20" . " "x15 . "20" . " "x15 . "20" . " "x14 . "20" . " "x14 . "20" .
+"\n"x4 .
+" "x20 . " 1" . " "x13 . " 1" . " "x14 . " 1" . " "x15 . " 1" . " "x15 . " 1" . " "x14 . " 1" . " "x14 . " 1" .
+"\n"x3 .
+" "x20 . "20" . " "x13 . "20" . " "x14 . "20" . " "x15 . "20" . " "x15 . "20" . " "x14 . "20" . " "x14 . "20";
+Clipboard->copy_to_all_selections($overlay);
+print "Select data block from shaded Target Daily Dose line down to Total Daily Dose lines. Use Noto Mono Regular 9 for a 300 DPI scan.\n";
+0;
