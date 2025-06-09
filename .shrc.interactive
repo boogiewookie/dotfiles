@@ -68,6 +68,7 @@ alias zb='zl -t bookmark'
 alias ze='zl -o space,encryption,encryptionroot,keyformat,keylocation,keystatus,mountpoint,mounted'
 alias zs='zl -t snapshot'
 alias zm='zl -o name,used,mountpoint,canmount,mounted'
+alias Man='man -l'
 logger "$PWD/.shrc.interactive after aliases"   #FIXME
 
 choosevi () {
@@ -80,9 +81,6 @@ choosevi () {
     fi
 }
 
-Man () {
-    nroff -man $1 | $PAGER
-}
 TO=$DUNC/src ; export TO
 to () {
     if test "$1" = "-c"
