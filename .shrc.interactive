@@ -19,7 +19,6 @@ SANDYSCHWAB='SandySchwabIRA.csv  SandySchwabLMSInhIRA.csv  SandySchwabTinman.csv
 SCHWABOFX="$KEVETSCHWAB $SANDYSCHWAB" ; export SCHWABOFX
 SCHWABPDF="`echo $SCHWABOFX | sed 's/ofx/pdf/g'`" ; export SCHWABPDF
 SCHWABCSV="`echo $SCHWABOFX | sed 's/ofx/csv/g'`" ; export SCHWABCSV
-PYTHONPATH=$PYTHONPATH:$HOME/opt/lib/python3.8/site-packages ; export PYTHONPATH
 PGHOST=localhost ; export PGHOST
 NO_COLOR=exactly ; export NO_COLOR
 
