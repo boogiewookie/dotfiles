@@ -2,7 +2,10 @@ logger "$PWD/.shrc commences $-" #FIXME
 # run by every shell
 unalias -a  # get rid of any nonsense .profile set
 PATH=~/.local/bin:~/bin:~/opt/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:~/.local/share/nvim/mason/bin:/usr/local/sbin:/usr/libexec:/usr/lib:/usr/games:/snap/bin:/home/dunc/encfs/stm/bin
+
 PYTHONPATH=$PYTHONPATH:$HOME/opt/lib/python3.8/site-packages:$HOME/.local/lib/python3/site-packages ; export PYTHONPATH
+
+PERL5LIB=$HOME/.local/lib/perl5/site-perl ; export PERL5LIB
 
 case "$-" in
 *i*)
