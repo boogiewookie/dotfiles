@@ -12,7 +12,7 @@ EXINIT=':set ts=4 sw=4 ai nows' ; export EXINIT
 PAGER='less -e' ; export PAGER
 MANPAGER=less ; export MANPAGER
 BLOCKSIZE="M" ; export BLOCKSIZE
-CDPATH=".:/usr/local:$DUNC/src/NetBeans:$DUNC/src/finance:$DUNC/src/cgi:$DUNC/src:/usr/local/www:$DUNC/diary:$DUNC:$DUNC/Documents:$DUNC/Export:$DUNC/Export/Misc:$DUNC/Textarch:/usr/local/bastille/templates/metamaya:${LOCALCDPATH:-}" ; export CDPATH
+CDPATH=".:/usr/local:$DUNC/src/NetBeans:$DUNC/src/finance:$DUNC/src/cgi:$DUNC/src:/usr/local/www:$DUNC/diary:$DUNC:$DUNC/Documents:$DUNC/Export:$DUNC/Export/Misc:$DUNC/Textarch:/usr/local/bastille/templates/metamaya:${LOCALCDPATH:-}:$DUNC/beancount" ; export CDPATH
 CVSIGNORE='.git/' ; export CVSIGNORE
 KEVETSCHWAB='KevetSchwabBank.csv  KevetSchwabMMDInhIRA.csv  KevetSchwabRoth.csv KevetSchwabIRA.csv   KevetSchwabOne.csv' ; export KEVETSCHWAB
 SANDYSCHWAB='SandySchwabIRA.csv  SandySchwabLMSInhIRA.csv  SandySchwabTinman.csv' ; export SANDYSCHWAB
