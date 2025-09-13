@@ -14,9 +14,10 @@ sub connect {
     my $db = shift @_;
     $db = shift @_ if ($db eq 'DbiIni');
     my $config = Config::Tiny->read($inifile);
+    my $dbname = $config->{$db}->{dbname} // $db;
     unshift @_, $config->{$db}->{password};
     unshift @_, $config->{$db}->{user};
-    unshift @_, "DBI:Pg:database=$db;host=$config->{$db}->{host}";
+    unshift @_, "DBI:Pg:database=$dbname;host=$config->{$db}->{host}";
     my $dbh = DBI->connect(@_);
     $handle{ refaddr($dbh) } = $dbh;
     Carp::cluck("    ## DbiIni::connect($db) = $dbh\n") if $trace;

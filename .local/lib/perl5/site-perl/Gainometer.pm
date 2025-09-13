@@ -28,8 +28,6 @@ my %latestquotedate;
 BEGIN {
     my $dbh = DbiIni->connect("finance",{'AutoCommit' => 1}) or die $DBI::errstr;
     %actions = %{$dbh->selectall_hashref("SELECT action, is_buy, is_income, is_sell FROM actions", 'action')};
-    %accounts = @{$dbh->selectcol_arrayref(
-        "SELECT acctkey, acctname FROM accounts",{Columns=>[1,2]})};
     %acctnumbers = @{$dbh->selectcol_arrayref(
         "SELECT acctnumber, acctkey FROM accounts",{Columns=>[1,2]})};
     %categories = @{$dbh->selectcol_arrayref(

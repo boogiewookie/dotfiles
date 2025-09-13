@@ -32,7 +32,7 @@ sub new
                               close IS NOT NULL
          ORDER BY juncture ASC",
         {RaiseError => 1},
-        $self{symbol});
+        $self->{symbol});
 
     foreach my $row (@{$bars})
 	{
