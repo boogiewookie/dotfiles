@@ -1,0 +1,9 @@
+zfs destroy -r bpool/users@7daysago
+zfs rename -r bpool/users@6daysago @7daysago
+zfs rename -r bpool/users@5daysago @6daysago
+zfs rename -r bpool/users@4daysago @5daysago
+zfs rename -r bpool/users@3daysago @4daysago
+zfs rename -r bpool/users@2daysago @3daysago
+zfs rename -r bpool/users@yesterday @2daysago
+zfs rename -r bpool/users@today @yesterday
+zfs snapshot -r bpool/users@today
