@@ -7,38 +7,46 @@ import datetime
 import re
 
 mondir = [0,
-        '01_Jan','02_Feb','03_Mar','04_Apr','05_May','06_Jun',
-        '07_Jul','08_Aug','09_Sep','10_Oct','11_Nov','12_Dec']
+          '01_Jan', '02_Feb', '03_Mar', '04_Apr', '05_May', '06_Jun',
+          '07_Jul', '08_Aug', '09_Sep', '10_Oct', '11_Nov', '12_Dec']
 
-dwc = {None: 1, '': 1, 'd': 1, 'D': 1, 'w': 7, 'W': 7, 'c': 28, 'C': 28,}
+dwc = {None: 1, '': 1, 'd': 1, 'D': 1, 'w': 7, 'W': 7, 'c': 28, 'C': 28, }
+
 
 def plus(juncture, offset):
     """move juncture by offset days"""
     return juncture+datetime.timedelta(days=offset)
 
+
 def nday(juncture):
     """Next day: juncture+1"""
     return plus(juncture, 1)
+
 
 def pday(juncture):
     """Previous day: juncture-1"""
     return plus(juncture, -1)
 
+
 def bom(juncture):
     """Beginning of month containing juncture"""
     return juncture.replace(day=1)
+
 
 def eom(juncture):
     """End of month containing juncture"""
     return pday(bom(bom(juncture)+datetime.timedelta(days=31)))
 
+
 def nmonth(juncture):
     """Same day next month"""
     return nday(eom(juncture)).replace(day=juncture.day)
 
+
 def pmonth(juncture):
     """Same day prev month"""
     return pday(bom(juncture)).replace(day=juncture.day)
+
 
 def calcudate(args):
     """Calculate a date according to args"""
@@ -77,6 +85,7 @@ def calcudate(args):
         elif arg == 'pday':
             juncture = pday(juncture)
     return juncture
+
 
 if not sys.argv[1:] or sys.argv[1] in ['-?', '-h', '--help']:
     print("usage: calcudate "
