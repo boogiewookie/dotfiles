@@ -1,0 +1,4 @@
+export GGML_CUDA_ENABLE_UNIFIED_MEMORY=1
+export MODELS_PATH="$HOME/ai/models/gguf"
+export OLLAMA_MODELS="$HOME/ai/models/ollama" # If you want Ollama elsewhere
+PATH=$PATH:/home/dunc/ai/llama.cpp/build/bin
