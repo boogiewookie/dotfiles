@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xbel>
-<xbel dbusName="konsole" folded="no" xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks" xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info" xmlns:kdepriv="http://www.kde.org/kdepriv">
+<xbel xmlns:kdepriv="http://www.kde.org/kdepriv" xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info" xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks" dbusName="konsole" folded="no">
  <bookmark href="file:///home/dunc">
   <title>dunc</title>
   <info>
@@ -51,6 +51,14 @@
  </bookmark>
  <bookmark href="file:///home/dunc/beancount/ingest/duncmods">
   <title>duncmods</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name=""/>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/dunc/src/refactorbeancount">
+  <title>refactorbeancount</title>
   <info>
    <metadata owner="http://freedesktop.org">
     <bookmark:icon name=""/>
