@@ -57,7 +57,6 @@ alias h='fc -l'
 alias history='fc -l'
 alias ls='ls -F'
 alias outofdate='pkg_version -vIL='
-alias psg='pgrep -l'
 alias vim=choosevi
 alias vimpass="cfs && vim -n $DUNC/encfs/cfs/sessame.txt"
 alias rpm='echo "You mean to say: lrpm"'
@@ -209,6 +208,9 @@ lh () {
     then
         tail -n 5 /var/log/apache2/*.log
     fi
+}
+psg () {
+    ps axlww | sed -n -e '1p' -e "\!$1!p"
 }
 formatcc () {
     cc "$@" |
