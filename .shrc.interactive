@@ -6,8 +6,19 @@ if [ -d ~dunc ]; then
 else
     DUNC= ; export DUNC
 fi
-VISUAL='vim' ; export VISUAL
-EDITOR='vim' ; export EDITOR
+if which nvim >/dev/null; then
+	VISUAL='nvim' ; export VISUAL
+	EDITOR='nvim' ; export EDITOR
+	alias vim=$VISUAL
+elif which vim >/dev/null; then
+	VISUAL='vim' ; export VISUAL
+	EDITOR='vim' ; export EDITOR
+	unalias vim
+else
+	VISUAL='vi' ; export VISUAL
+	EDITOR='vi' ; export EDITOR
+	alias vim=$VISUAL
+fi
 EXINIT=':set ts=4 sw=4 ai nows' ; export EXINIT
 PAGER='less -e' ; export PAGER
 MANPAGER=less ; export MANPAGER
@@ -40,14 +51,6 @@ else
     PS1="${VIRTUAL_ENV_PROMPT:-}$USER@$HOST$SIGL "
 fi
 
-if ! which vim >/dev/null; then
-    alias vim="vi"
-elif [ -f ~/.vimrc ]; then
-    alias vim="vim -u ~/.vimrc"
-else
-    alias vim="vim -N"
-fi
-
 # Add some aliases
 alias cdbt='cd /usr/local/bastille/templates/metamaya'
 alias cdrt='cd /usr/local/rocinante/templates/metamaya'
@@ -57,7 +60,6 @@ alias h='fc -l'
 alias history='fc -l'
 alias ls='ls -F'
 alias outofdate='pkg_version -vIL='
-alias vim=choosevi
 alias vimpass="cfs && vim -n $DUNC/encfs/cfs/sessame.txt"
 alias rpm='echo "You mean to say: lrpm"'
 alias zl='zfs list'
@@ -68,16 +70,6 @@ alias zs='zl -t snapshot'
 alias zm='zl -o name,used,mountpoint,canmount,mounted'
 alias Man='man -l'
 logger "$PWD/.shrc.interactive after aliases"   #FIXME
-
-choosevi () {
-    if which nvim >/dev/null; then
-        command nvim "$@"
-    elif which vim >/dev/null; then
-        command vim "$@"
-    else
-        command vi "$@"
-    fi
-}
 
 TO=$DUNC/src ; export TO
 to () {
