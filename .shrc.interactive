@@ -176,8 +176,8 @@ ll () {
             if [ -d "/var/log/nginx" ]; then
                 less +F "/var/log/nginx/error.log"  "/var/log/nginx/access.log"
             fi
-        elif [ "$1" = "uwsgi" ]; then
-	    less +F "/var/log/uwsgi-statements.log"
+        elif [ "$1" = "uwsgi" ] || [ "$1" = "statements" ]; then
+	    less +F "/var/log/uwsgi/statements.log"
         elif [ "$1" = "wiki" ] || [ "$1" = "foswiki" ]; then
             logs="/usr/local/www/foswiki/working/logs"
             if [ -d "$logs" ]; then
