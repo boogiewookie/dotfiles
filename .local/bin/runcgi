@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+# vim: set ts=4 sw=4 expandtab :
+if (@ARGV < 2) {
+    print STDERR "usage: runcgi SCRIPT /PATH_INFO\n";
+    exit 1;
+}
+
+my ($pi, $qs) = $ARGV[1] =~ m{^([^?]*)(.*)$};
+$pi = "/$pi" unless (substr($pi,0) == '/');
+$qs = substr($qs, 1) if (substr($qs,0) == '?');
+
+$ENV{PATH_INFO} = $pi;
+$ENV{QUERY_STRING} = $qs;
+$ENV{PERL5LIB} = "/usr/local/www/.local/lib/perl5/site-perl";
+$ENV{REQUEST_METHOD} = "GET";
+$ENV{HTTP_HOST} = "localhost";
+exec($ARGV[0]);
