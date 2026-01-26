@@ -5,28 +5,16 @@ while($_ = <DATA>) {
     @_ = split;
     $map{$_[1]} = $_[0];
 }
-close($map);
 
-my %slot;
-my %desc;
-my %ident;
-my %label;
-open(my $log, "-|", "dmesg") or die "can't open |dmesg";
-while($_ = <$log>) {
-    $slot{$1} = "slot$2" if (/(da\d+) at .* scbus(\d+)/);
-    $desc{$1} = $2 if (/(ada\d+): (<.+>)/);
-    if (/(a?da\d+): Serial Number (\S+)/) {
-        $ident{$1} = $2;
-        $label{$1} = $map{$2} or "n/a";
-    }
-}
-close($log);
-
+my $fmt = "%-10s %-12s %-15s\n";
+printf "%-10s %-12s %-15s\n", "DISK", "LABEL", "IDENT";
 my @disks = @ARGV;
 @disks = map(/(a?da\d+)\b/,glob("/dev/ada* /dev/da*")) unless(@disks);;
 foreach my $disk (@disks) {
     $disk =~ s:.*/::;
-    print "$disk    $slot{$disk}    $label{$disk}   $ident{$disk}   $desc{$disk}\n";
+    chomp($ident = `diskinfo -s /dev/$disk`);
+    $label = $map{$ident} or "n/a";
+    printf $fmt, $disk, $label, $ident;
 }
 
 0;
