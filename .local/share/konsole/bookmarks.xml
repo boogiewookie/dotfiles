@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xbel>
-<xbel xmlns:kdepriv="http://www.kde.org/kdepriv" xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info" xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks" dbusName="konsole" folded="no">
- <bookmark href="file:///home/dunc">
-  <title>dunc</title>
+<xbel xmlns:kdepriv="http://www.kde.org/kdepriv" folded="no" dbusName="konsole" xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks" xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info">
+ <bookmark href="file:///home/dunc/src/refactorbeancount">
+  <title>refactorbeancount</title>
   <info>
    <metadata owner="http://freedesktop.org">
     <bookmark:icon name=""/>
@@ -11,6 +11,14 @@
  </bookmark>
  <bookmark href="file:///home/dunc/beancount/ingest">
   <title>ingest</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name=""/>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/dunc">
+  <title>dunc</title>
   <info>
    <metadata owner="http://freedesktop.org">
     <bookmark:icon name=""/>
@@ -57,8 +65,8 @@
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/dunc/src/refactorbeancount">
-  <title>refactorbeancount</title>
+ <bookmark href="file:///home/dunc/src/backup">
+  <title>backup</title>
   <info>
    <metadata owner="http://freedesktop.org">
     <bookmark:icon name=""/>
