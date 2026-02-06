@@ -172,9 +172,13 @@ ll () {
             less +F "/var/log/$1.log"
         elif [ -f "/var/log/${1}log" ]; then
             less +F "/var/log/${1}log"
-        elif [ "$1" = "nginx" ] || [ "$1" = "http" ]; then
+        elif [ "$1" = "nginx" ]; then
             if [ -d "/var/log/nginx" ]; then
                 less +F "/var/log/nginx/error.log"  "/var/log/nginx/access.log"
+            fi
+        elif [ "$1" = "caddy" ]; then
+            if [ -d "/var/log/caddy" ]; then
+                less +F "/var/log/caddy/caddy.log"  "/var/log/caddy/access.log"
             fi
         elif [ "$1" = "uwsgi" ] || [ "$1" = "statements" ]; then
 	    less +F "/var/log/uwsgi/statements.log"
