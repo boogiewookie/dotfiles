@@ -6,15 +6,18 @@ while($_ = <DATA>) {
     $map{$_[1]} = $_[0];
 }
 
-my $fmt = "%-10s %-12s %-15s\n";
-printf "%-10s %-12s %-15s\n", "DISK", "LABEL", "IDENT";
+my $fmt = "%-10s %-12s %-15s %-10s\n";
+printf $fmt, "DISK", "LABEL", "IDENT", "SIZE";
 my @disks = @ARGV;
 @disks = map(/(a?da\d+)\b/,glob("/dev/ada* /dev/da*")) unless(@disks);;
 foreach my $disk (@disks) {
     $disk =~ s:.*/::;
     chomp($ident = `diskinfo -s /dev/$disk`);
-    $label = $map{$ident} or "n/a";
-    printf $fmt, $disk, $label, $ident;
+    $label = $map{$ident};
+    $label = "n/a" unless($label);
+    @line = grep(/mediasize in bytes/, `diskinfo -v /dev/$disk`);
+    ($size) = $line[0] =~ /\((.*)\)/;
+    printf $fmt, $disk, $label, $ident, $size;
 }
 
 0;
