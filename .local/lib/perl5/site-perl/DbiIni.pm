@@ -15,6 +15,7 @@ sub connect {
     $db = shift @_ if ($db eq 'DbiIni');
     my $config = Config::Tiny->read($inifile);
     my $dbname = $config->{$db}->{dbname} // $db;
+    # NOTE: Portfolio.php needs to be kept in sync
     unshift @_, $config->{$db}->{password};
     unshift @_, $config->{$db}->{user};
     unshift @_, "DBI:Pg:database=$dbname;host=$config->{$db}->{host}";
