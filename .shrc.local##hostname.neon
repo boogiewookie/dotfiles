@@ -1,4 +1,10 @@
 export GGML_CUDA_ENABLE_UNIFIED_MEMORY=1
 export MODELS_PATH="$HOME/ai/models/gguf"
-export OLLAMA_MODELS="$HOME/ai/models/ollama" # If you want Ollama elsewhere
+# vars for hf
+export HF_HOME="$HOME/ai/models/huggingface"
+#export HF_TOKEN moved to .secrets
+# vars for aider
+export OPENAI_API_BASE=http://127.0.0.1:8000/v1
+#export OPENAI_API_KEY moved to .secrets
+
 PATH=$PATH:/home/dunc/ai/llama.cpp/build/bin
