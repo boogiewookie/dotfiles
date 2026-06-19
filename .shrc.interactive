@@ -1,3 +1,4 @@
+# vi: set ts=4 sw=4 expandtab :
 logger "$PWD/.shrc.interactive commences" ##FIXME
 
 # Set some preferences
@@ -7,17 +8,17 @@ else
     DUNC= ; export DUNC
 fi
 if which nvim >/dev/null; then
-	VISUAL='nvim' ; export VISUAL
-	EDITOR='nvim' ; export EDITOR
-	alias vim=$VISUAL
+    VISUAL='nvim' ; export VISUAL
+    EDITOR='nvim' ; export EDITOR
+    alias vim=$VISUAL
 elif which vim >/dev/null; then
-	VISUAL='vim' ; export VISUAL
-	EDITOR='vim' ; export EDITOR
-	unalias vim
+    VISUAL='vim' ; export VISUAL
+    EDITOR='vim' ; export EDITOR
+    unalias vim
 else
-	VISUAL='vi' ; export VISUAL
-	EDITOR='vi' ; export EDITOR
-	alias vim=$VISUAL
+    VISUAL='vi' ; export VISUAL
+    EDITOR='vi' ; export EDITOR
+    alias vim=$VISUAL
 fi
 EXINIT=':set ts=4 sw=4 ai nows' ; export EXINIT
 PAGER='less -e' ; export PAGER
@@ -173,22 +174,26 @@ ll () {
         elif [ -f "/var/log/${1}log" ]; then
             less +F "/var/log/${1}log"
         elif [ "$1" = "nginx" ]; then
-            if [ -d "/var/log/nginx" ]; then
-                less +F "/var/log/nginx/error.log"  "/var/log/nginx/access.log"
+            dir="/var/log/nginx"
+            if [ -d "$dir" ]; then
+                less +F "$dir/error.log"  "$dir/access.log"
             fi
         elif [ "$1" = "caddy" ]; then
             if [ -d "/var/log/caddy" ]; then
                 less +F "/var/log/caddy/caddy.log"  "/var/log/caddy/access.log"
             fi
         elif [ "$1" = "uwsgi" ] || [ "$1" = "statements" ]; then
-	    less +F "/var/log/uwsgi/statements.log"
+            less +F "/var/log/uwsgi/statements.log"
         elif [ "$1" = "wiki" ] || [ "$1" = "foswiki" ]; then
-            logs="/usr/local/www/foswiki/working/logs"
-            if [ -d "$logs" ]; then
-                less +F "$logs/error.log" "$logs/debug.log" "$logs/events.log" "$logs/configure.log"
+            dir="/usr/local/www/foswiki/working/logs"
+            if [ -d "$dir" ]; then
+                less +F "$dir/error.log" "$dir/debug.log" "$dir/events.log" "$dir/configure.log"
             fi
         elif [ "$1" = "llama" ] || [ "$1" = "llama-server" ]; then
-            journalctl --user -u llama-server -f
+            dir="/var/log/llama-server"
+            if [ -d "$dir" ]; then
+                less +F "$dir/llama-server.log"
+            fi
         elif [ "$1" = "open-webui" ] || [ "$1" = "webui" ]; then
             docker logs -f open-webui
         fi
