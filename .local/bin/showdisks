@@ -6,7 +6,7 @@ while($_ = <DATA>) {
     $map{$_[1]} = $_[0];
 }
 
-my $fmt = "%-10s %-12s %-15s %-10s\n";
+my $fmt = "%-10s %-15s %-15s %-10s\n";
 printf $fmt, "DISK", "LABEL", "IDENT", "SIZE";
 my @disks = @ARGV;
 @disks = map(/(a?da\d+)\b/,glob("/dev/ada* /dev/da*")) unless(@disks);;
@@ -33,9 +33,9 @@ danburite PN2334PBKP5RNT
 gypsum P4GSMPUC
 feldspar VKHRHWGX
 enstatite VLGZAVSY
-original VOLUME-3856
+archaeopteris VOLUME-3856
 birch VOLUME-13439
 cedar VOLUME-13438
 dogwood VOLUME-13441
-aspen VOLUME-13440
+ginkgo VOLUME-13440
 elm VOLUME-29575
