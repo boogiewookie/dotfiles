@@ -8,3 +8,4 @@ export OPENAI_API_BASE=http://127.0.0.1:8000/v1
 #export OPENAI_API_KEY moved to .secrets
 
 PATH=$PATH:/home/dunc/ai/llama.cpp/build/bin
+CDPATH=.:/usr/local/www:/home/dunc/beancount:/home/dunc/src
